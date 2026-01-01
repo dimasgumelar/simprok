@@ -57,6 +57,11 @@ export default function DevicesForm({ device = {}, types, isEdit = false }) {
         }
     };
 
+    const onChangeInputHandler = (key, e) => {
+        setData(key, e.target.value);
+        errors[key] = null;
+    };
+
     return (
         <AuthenticatedLayout>
             <Head title={`${isEdit ? "Ubah" : "Tambah"} Pengguna`} />
@@ -71,14 +76,14 @@ export default function DevicesForm({ device = {}, types, isEdit = false }) {
                             label="Nama"
                             placeholder="Nama"
                             value={data.name}
-                            onChange={(e) => setData("name", e.target.value)}
+                            onChange={(e) => onChangeInputHandler("name", e)}
                             error={errors.name}
                         />
                         <InputDropdownManual
                             isRequired={true}
                             label="Tipe"
                             value={data.type}
-                            onChange={(e) => setData("type", e.target.value)}
+                            onChange={(e) => onChangeInputHandler("type", e)}
                             error={errors.type}
                             list={types}
                             idKey="value"

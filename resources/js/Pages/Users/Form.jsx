@@ -66,6 +66,11 @@ export default function UsersForm({ user = {}, roles, isEdit = false }) {
         }
     };
 
+    const onChangeInputHandler = (key, e) => {
+        setData(key, e.target.value);
+        errors[key] = null;
+    };
+
     return (
         <AuthenticatedLayout>
             <Head title={`${isEdit ? "Ubah" : "Tambah"} Pengguna`} />
@@ -80,7 +85,7 @@ export default function UsersForm({ user = {}, roles, isEdit = false }) {
                             label="Nama"
                             placeholder="Nama"
                             value={data.name}
-                            onChange={(e) => setData("name", e.target.value)}
+                            onChange={(e) => onChangeInputHandler("name", e)}
                             error={errors.name}
                         />
                         <Input
@@ -89,7 +94,7 @@ export default function UsersForm({ user = {}, roles, isEdit = false }) {
                             label="Telepon"
                             placeholder="Telepon"
                             value={data.phone}
-                            onChange={(e) => setData("phone", e.target.value)}
+                            onChange={(e) => onChangeInputHandler("phone", e)}
                             error={errors.name}
                         />
                         <Input
@@ -98,7 +103,7 @@ export default function UsersForm({ user = {}, roles, isEdit = false }) {
                             label="Email"
                             placeholder="Email"
                             value={data.email}
-                            onChange={(e) => setData("email", e.target.value)}
+                            onChange={(e) => onChangeInputHandler("email", e)}
                             error={errors.email}
                             disabled={isEdit}
                         />
@@ -109,7 +114,7 @@ export default function UsersForm({ user = {}, roles, isEdit = false }) {
                             placeholder="Kata Sandi"
                             value={data.password}
                             onChange={(e) =>
-                                setData("password", e.target.value)
+                                onChangeInputHandler("password", e)
                             }
                             error={errors.password}
                             onClick={generatePassword}
@@ -122,7 +127,7 @@ export default function UsersForm({ user = {}, roles, isEdit = false }) {
                             isRequired={true}
                             label="Peran"
                             value={data.role}
-                            onChange={(e) => setData("role", e.target.value)}
+                            onChange={(e) => onChangeInputHandler("role", e)}
                             error={errors.role}
                             list={roles}
                         />
