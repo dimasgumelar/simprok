@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Head, Link, useForm } from "@inertiajs/react";
-import { FaUserShield, FaBroadcastTower } from "react-icons/fa";
+import { Head, useForm } from "@inertiajs/react";
+import { FaUserShield } from "react-icons/fa";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SortableHeader from "@/Components/SortableHeader";
 import Breadcrumbs from "@/Components/Breadcrumbs";
@@ -195,18 +195,6 @@ export default function UsersIndex({ users, roles }) {
                                                         openDeleteModal(user.id)
                                                     }
                                                 />
-                                                <Link
-                                                    href={route(
-                                                        "users.transmissions",
-                                                        user.id
-                                                    )}
-                                                    className="btn btn-sm btn-warning"
-                                                >
-                                                    <FaBroadcastTower />
-                                                    <span className="hidden sm:flex">
-                                                        Transmisi
-                                                    </span>
-                                                </Link>
                                             </td>
                                         </tr>
                                     ))

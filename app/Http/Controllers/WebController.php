@@ -17,20 +17,6 @@ class WebController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        $userId = null;
-        $createdBy = null;
-        if ($user->hasRole(['teknisi'])) {
-            $createdBy = $user->id;
-        }
-        $maintenancesInfo = $this->maintenanceService->info($userId, $createdBy);
-        
-        if ($user->hasAnyRole(['teknisi', 'operator'])) {
-            $createdBy = null;
-            $userId = $user->id;
-        }
-        
-        $tasksInfo = $this->maintenanceService->info($userId, $createdBy);
-        
         return Inertia::render('Dashboard', [
             'user' => [
                 'id' => $user->id,
@@ -38,8 +24,6 @@ class WebController extends Controller
                 'email' => $user->email,
                 'roles' => $user->roles,
             ],
-            "maintenance" => $maintenancesInfo,
-            "task" => $tasksInfo,
         ]);
     }
 }

@@ -47,10 +47,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    
-    public function transmissions()
-    {
-        return $this->belongsToMany(Transmission::class, 'user_transmissions')
-                    ->withTimestamps();
-    }
 }

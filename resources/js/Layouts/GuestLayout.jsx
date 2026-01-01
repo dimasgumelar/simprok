@@ -6,9 +6,9 @@ export default function GuestLayout({ children }) {
         <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0 dark:bg-gray-900">
             <div>
                 <Link href="/" className="flex flex-col flex-wrap items-center">
-                    <div className="text-4xl">SIMANTAR</div>
+                    <div className="text-4xl">SIMPROK</div>
                     <div className="text-1xl">
-                        Sistem Informasi Maintenance Alat Transmisi
+                        Sistem Informasi Monitoring Kecepatan Kendaraan
                     </div>
                     {/* <ApplicationLogo className="h-20 w-20 fill-current text-gray-500" /> */}
                 </Link>
