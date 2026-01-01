@@ -123,7 +123,7 @@ export function InputDropdownManual({
     );
 
     const selectedLabel =
-        list.find((item) => item[idKey] === value)?.[labelKey] || "Select...";
+        list.find((item) => item[idKey] === value)?.[labelKey] || "Pilih...";
 
     // Tutup dropdown saat klik di luar
     useEffect(() => {

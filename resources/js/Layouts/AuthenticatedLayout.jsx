@@ -1,6 +1,6 @@
 import { Link, router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
-import { FaHome, FaUser } from "react-icons/fa";
+import { FaHome, FaUser, FaSatelliteDish } from "react-icons/fa";
 import FlashToast from "@/Components/FlashToast";
 
 export default function AuthenticatedLayout({ children }) {
@@ -12,13 +12,19 @@ export default function AuthenticatedLayout({ children }) {
             label: "Beranda",
             icon: <FaHome />,
             routeStr: "dashboard",
-            roles: ["admin", "ketua tim", "teknisi", "operator"],
+            roles: ["admin", "operator"],
         },
         {
             label: "Pengguna",
             icon: <FaUser />,
             routeStr: "users.index",
-            roles: ["admin", "ketua tim"],
+            roles: ["admin"],
+        },
+        {
+            label: "Perangkat",
+            icon: <FaSatelliteDish />,
+            routeStr: "devices.index",
+            roles: ["admin"],
         },
     ];
     const userRoleNames =

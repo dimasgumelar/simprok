@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Device;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DeviceSeeder extends Seeder
 {
@@ -12,6 +13,12 @@ class DeviceSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        for ($i=1; $i <=4 ; $i++) { 
+            Device::create([
+                'name' => 'Alat '.$i,
+                'type' => 'microcontroller',
+                'identifier' => (string) Str::uuid(),
+            ]);
+        }
     }
 }
