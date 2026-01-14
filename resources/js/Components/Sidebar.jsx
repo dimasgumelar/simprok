@@ -40,6 +40,12 @@ export default function Sidebar({
             routeStr: "devices.index",
             roles: ["admin"],
         },
+        {
+            label: "GPS Log",
+            icon: <FaSatelliteDish />,
+            routeStr: "gpslogs.index",
+            roles: ["admin", "operator"],
+        },
     ];
 
     useEffect(() => {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\GpsLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebController;
@@ -36,12 +37,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/users/{user}/delete', [UserController::class, 'destroy'])->name('users.destroy');
     
     Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');
+    Route::get('/devices/export', [DeviceController::class, 'export'])->name('devices.export');
     Route::get('/devices/create', [DeviceController::class, 'create'])->name('devices.create');
     Route::post('/devices', [DeviceController::class, 'store'])->name('devices.store');
     Route::get('/devices/{device}/view', [DeviceController::class, 'show'])->name('devices.view');
     Route::get('/devices/{device}/edit', [DeviceController::class, 'edit'])->name('devices.edit');
     Route::put('/devices/{device}', [DeviceController::class, 'update'])->name('devices.update');
     Route::post('/devices/{device}/delete', [DeviceController::class, 'destroy'])->name('devices.destroy');
+    
+    Route::get('/gps-log', [GpsLogController::class, 'index'])->name('gpslogs.index');
+    Route::get('/gps-log/export', [GpsLogController::class, 'export'])->name('gpslogs.export');
 });
 
 require __DIR__.'/auth.php';

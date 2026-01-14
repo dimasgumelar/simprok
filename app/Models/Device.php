@@ -19,4 +19,9 @@ class Device extends Model
         'type',
         'identifier',
     ];
+
+    public function gpsLogs()
+    {
+        return $this->hasMany(GpsLog::class);
+    }
 }
