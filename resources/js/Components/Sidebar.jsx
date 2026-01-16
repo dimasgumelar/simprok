@@ -1,6 +1,16 @@
 import { Link } from "@inertiajs/react";
+import { list } from "postcss";
 import { useState, useEffect } from "react";
-import { FaHome, FaUser, FaChevronDown, FaSatelliteDish } from "react-icons/fa";
+import {
+    FaHome,
+    FaUser,
+    FaChevronDown,
+    FaSatelliteDish,
+    FaTachometerAlt,
+    FaMap,
+    FaListAlt,
+    FaFolder,
+} from "react-icons/fa";
 
 export default function Sidebar({
     userRoleNames,
@@ -29,21 +39,46 @@ export default function Sidebar({
             roles: ["admin", "operator"],
         },
         {
-            label: "Pengguna",
-            icon: <FaUser />,
-            routeStr: "users.index",
+            label: "Master Data",
+            icon: <FaFolder />,
             roles: ["admin"],
-        },
-        {
-            label: "Perangkat",
-            icon: <FaSatelliteDish />,
-            routeStr: "devices.index",
-            roles: ["admin"],
+            list: [
+                {
+                    label: "Pengguna",
+                    icon: <FaUser />,
+                    routeStr: "users.index",
+                    roles: ["admin"],
+                },
+                {
+                    label: "Perangkat",
+                    icon: <FaSatelliteDish />,
+                    routeStr: "devices.index",
+                    roles: ["admin"],
+                },
+            ],
         },
         {
             label: "GPS Log",
-            icon: <FaSatelliteDish />,
+            icon: <FaListAlt />,
             routeStr: "gpslogs.index",
+            roles: ["admin", "operator"],
+        },
+        {
+            label: "Kecepatan",
+            icon: <FaTachometerAlt />,
+            routeStr: "gps.speed",
+            roles: ["admin", "operator"],
+        },
+        {
+            label: "Peta",
+            icon: <FaMap />,
+            routeStr: "gps.map",
+            roles: ["admin", "operator"],
+        },
+        {
+            label: "Trip",
+            icon: <FaMap />,
+            routeStr: "gps.map",
             roles: ["admin", "operator"],
         },
     ];

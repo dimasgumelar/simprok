@@ -9,12 +9,12 @@ import TableSearch from "@/Components/TableSearch";
 import { parseDateTime } from "@/utils/helper-function";
 import { DownloadButton } from "@/Components/Button";
 import { inertiaGet } from "@/utils/helper-function";
-import { BreadcrumbsGpsLogs } from "@/Pages/GpsLogs/Constant";
+import { BreadcrumbsTrips } from "@/Pages/Trips/Constant";
 
-export default function GpsLogsIndex({ gpsLogs }) {
-    const breadcrumbs = [<BreadcrumbsGpsLogs />, "Daftar"];
+export default function TripsIndex({ trips }) {
+    const breadcrumbs = [<BreadcrumbsTrips />, "Daftar"];
 
-    const [perPage, setPerPage] = useState(gpsLogs.per_page || 10);
+    const [perPage, setPerPage] = useState(trips.per_page || 10);
     const [search, setSearch] = useState("");
     const [sortField, setSortField] = useState("");
     const [sortDirection, setSortDirection] = useState("");
@@ -125,28 +125,28 @@ export default function GpsLogsIndex({ gpsLogs }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {gpsLogs.data.length === 0 ? (
+                                {trips.data.length === 0 ? (
                                     <TableNotFound
                                         message="Tidak ada data yang ditemukan."
                                         colspan={5}
                                     />
                                 ) : (
-                                    gpsLogs.data.map((gpsLog, index) => (
-                                        <tr key={gpsLog.id}>
+                                    trips.data.map((trip, index) => (
+                                        <tr key={trip.id}>
                                             <th>
-                                                {(gpsLogs.current_page - 1) *
-                                                    gpsLogs.per_page +
+                                                {(trips.current_page - 1) *
+                                                    trips.per_page +
                                                     index +
                                                     1}
                                             </th>
-                                            <td>{gpsLog.name}</td>
-                                            <td>{gpsLog.trip_id}</td>
-                                            <td>{gpsLog.latitude}</td>
-                                            <td>{gpsLog.longitude}</td>
-                                            <td>{gpsLog.speed}</td>
+                                            <td>{trip.name}</td>
+                                            <td>{trip.trip_id}</td>
+                                            <td>{trip.latitude}</td>
+                                            <td>{trip.longitude}</td>
+                                            <td>{trip.speed}</td>
                                             <td>
                                                 {parseDateTime(
-                                                    gpsLog.recorded_at
+                                                    trip.recorded_at
                                                 )}
                                             </td>
                                         </tr>
@@ -157,7 +157,7 @@ export default function GpsLogsIndex({ gpsLogs }) {
                         <Pagination
                             perPage={perPage}
                             handlePerPageChange={handlePerPageChange}
-                            data={gpsLogs.links}
+                            data={trips.links}
                         />
                     </div>
                 </div>

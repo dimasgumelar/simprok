@@ -46,3 +46,15 @@ export const STATUS_LIST = [
         label: "Selesai",
     },
 ];
+
+export const MQTT_BROKE_URL =
+    "wss://rf60f168.ala.asia-southeast1.emqxsl.com:8084/mqtt";
+export const MQTT_USERNAME = "simprok-web";
+export const MQTT_PASSWORD = "simprok-web";
+export const MQTT_TOPIC = "testtopic/1";
+export const MQTT_CLIENT_ID = () => {
+    return "emqx_test_" + Math.random().toString(16).substring(2, 8);
+};
+
+export const FONT_FAMILY =
+    'Figtree, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';

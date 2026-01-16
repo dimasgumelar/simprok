@@ -10,6 +10,7 @@ class GpsLogRepository
         $query = GpsLog::query()->select('gps_logs.*', 'devices.name');
         if ($search) {
             $query->where('devices.name', 'like', "%{$search}%");
+            $query->orWhere('gps_logs.trip_id', 'like', "%{$search}%");
         }
 
         $query->join('devices', 'gps_logs.device_id', '=', 'devices.id');

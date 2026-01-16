@@ -6,7 +6,6 @@ use App\Models\GpsLog;
 use App\Services\GpsLogService;
 use App\Services\ExportService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class GpsLogController extends Controller
@@ -33,7 +32,6 @@ class GpsLogController extends Controller
         $sortField = $request->input('sort', 'id');
         $sortDirection = $request->input('direction', 'asc');
 
-        // $gpsLogs = $this->gpsLogService->getAllGrouped($search, $perPage, $sortField, $sortDirection);
         $gpsLogs = $this->gpsLogService->getAll($search, $perPage, $sortField, $sortDirection);
 
         return Inertia::render('GpsLogs/Index', compact('gpsLogs'));

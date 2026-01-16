@@ -1,4 +1,8 @@
-export default function TableSearch({ inputHandler, inputValue = "" }) {
+export default function TableSearch({
+    inputHandler,
+    inputValue = "",
+    placeholder = "Cari",
+}) {
     return (
         <div className="join">
             <div>
@@ -21,7 +25,7 @@ export default function TableSearch({ inputHandler, inputValue = "" }) {
                     </svg>
                     <input
                         type="search"
-                        placeholder="Cari"
+                        placeholder={placeholder}
                         value={inputValue}
                         onChange={(e) => inputHandler(e.target.value)}
                     />

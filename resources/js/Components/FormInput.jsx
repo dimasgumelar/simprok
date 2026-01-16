@@ -113,6 +113,7 @@ export function InputDropdownManual({
     list = [],
     idKey = "id",
     labelKey = "name",
+    labelUnselected = "Pilih...",
 }) {
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState("");
@@ -123,7 +124,8 @@ export function InputDropdownManual({
     );
 
     const selectedLabel =
-        list.find((item) => item[idKey] === value)?.[labelKey] || "Pilih...";
+        list.find((item) => item[idKey] === value)?.[labelKey] ||
+        labelUnselected;
 
     // Tutup dropdown saat klik di luar
     useEffect(() => {

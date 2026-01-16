@@ -3,6 +3,7 @@
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\GpsLogController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GpsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     
     Route::get('/gps-log', [GpsLogController::class, 'index'])->name('gpslogs.index');
     Route::get('/gps-log/export', [GpsLogController::class, 'export'])->name('gpslogs.export');
+    
+    Route::get('/gps-log', [GpsLogController::class, 'index'])->name('gpslogs.index');
+    Route::get('/gps-log/export', [GpsLogController::class, 'export'])->name('gpslogs.export');
+
+    Route::get('/speed', [GpsController::class, 'speed'])->name('gps.speed');
+    Route::get('/map', [GpsController::class, 'map'])->name('gps.map');
 });
 
 require __DIR__.'/auth.php';
