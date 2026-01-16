@@ -49,8 +49,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/gps-log', [GpsLogController::class, 'index'])->name('gpslogs.index');
     Route::get('/gps-log/export', [GpsLogController::class, 'export'])->name('gpslogs.export');
     
-    Route::get('/gps-log', [GpsLogController::class, 'index'])->name('gpslogs.index');
-    Route::get('/gps-log/export', [GpsLogController::class, 'export'])->name('gpslogs.export');
+    Route::get('/trip', [GpsLogController::class, 'tripIndex'])->name('trips.index');
+    Route::get('/trip/export', [GpsLogController::class, 'tripExport'])->name('trips.export');
 
     Route::get('/speed', [GpsController::class, 'speed'])->name('gps.speed');
     Route::get('/map', [GpsController::class, 'map'])->name('gps.map');

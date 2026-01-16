@@ -8,7 +8,7 @@ export default function GuestLayout({ children }) {
                 <Link href="/" className="flex flex-col flex-wrap items-center">
                     <div className="text-4xl">SIMPROK</div>
                     <div className="text-1xl">
-                        Sistem Informasi Monitoring Kecepatan Kendaraan
+                        Sistem Informasi Monitoring Profil Kecepatan Kendaraan
                     </div>
                     {/* <ApplicationLogo className="h-20 w-20 fill-current text-gray-500" /> */}
                 </Link>

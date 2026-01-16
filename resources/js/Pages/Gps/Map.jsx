@@ -4,6 +4,13 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import mqtt from "mqtt";
 import TableDropdown from "@/Components/TableDropdown";
 import MapView from "@/Components/Maps/MapView";
+import {
+    MQTT_BROKE_URL,
+    MQTT_USERNAME,
+    MQTT_PASSWORD,
+    MQTT_TOPIC,
+    MQTT_CLIENT_ID,
+} from "@/utils/constants";
 
 export default function Map({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState([]);
@@ -14,15 +21,15 @@ export default function Map({ devices }) {
     const password = "simprok-web";
 
     useEffect(() => {
-        const client = mqtt.connect(
-            "wss://rf60f168.ala.asia-southeast1.emqxsl.com:8084/mqtt",
-            { clientId, username, password }
-        );
+        const client = mqtt.connect(MQTT_BROKE_URL, {
+            clientId: MQTT_CLIENT_ID(),
+            username: MQTT_USERNAME,
+            password: MQTT_PASSWORD,
+        });
 
         client.on("connect", () => {
             console.log("Connected to EMQX");
-            const topic = "testtopic/1";
-            client.subscribe(topic, { qos: 0 }, (err) => {
+            client.subscribe(MQTT_TOPIC, { qos: 0 }, (err) => {
                 if (err) console.log(`Subscribe ${topic} error:`, err);
             });
         });

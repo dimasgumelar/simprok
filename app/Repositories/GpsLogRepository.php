@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\GpsLog;
+use Illuminate\Support\Facades\DB;
 
 class GpsLogRepository
 {
@@ -18,8 +19,41 @@ class GpsLogRepository
         if ($sortField && in_array($sortField, ['id', 'device_id', 'latitude', 'longitude', 'speed', 'recorded_at'])) {
             $query->orderBy($sortField, $sortDirection);
         }
+        
+        if ($sortField == "name") {
+            $query->orderBy("devices.name", $sortDirection);
+        }
 
-       $gpsLogs = $perPage == 0
+        $gpsLogs = $perPage == 0
+            ? $query->get()
+            : $query->paginate($perPage)->withQueryString()->onEachSide(0);
+
+        return $gpsLogs;
+    }
+
+    public function allTrip($search, $perPage, $sortField, $sortDirection)
+    {
+        $query = GpsLog::query()
+            ->select('gps_logs.trip_id', 'devices.name', DB::raw('MIN(gps_logs.recorded_at) as recorded_at'))
+            ->join('devices', 'gps_logs.device_id', '=', 'devices.id');
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('devices.name', 'like', "%{$search}%")
+                ->orWhere('gps_logs.trip_id', 'like', "%{$search}%");
+            });
+        }
+
+        $query->groupBy('gps_logs.trip_id', 'devices.name');
+
+        if ($sortField && in_array($sortField, ['trip_id', 'recorded_at'])) {
+            $query->orderBy($sortField, $sortDirection);
+        }
+        if ($sortField == "name") {
+            $query->orderBy("devices.name", $sortDirection);
+        }
+
+        $gpsLogs = $perPage == 0
             ? $query->get()
             : $query->paginate($perPage)->withQueryString()->onEachSide(0);
 

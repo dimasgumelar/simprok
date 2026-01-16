@@ -71,6 +71,56 @@ class GpsLogController extends Controller
         };
 
         return $this->exportService->export($fileName, $callback);
+    
+        }
+    /**
+     * Display a listing of the resource.
+     */
+    public function tripIndex(Request $request)
+    {
+        // Ambil input filter
+        $search = $request->input('search');
+        $perPage = $request->input('per_page', 10);
+
+        // Ambil input sorting
+        $sortField = $request->input('sort', 'trip_id');
+        $sortDirection = $request->input('direction', 'asc');
+
+        $trips = $this->gpsLogService->getAllTrip($search, $perPage, $sortField, $sortDirection);
+
+        return Inertia::render('Trips/Index', compact('trips'));
+    }
+
+    public function tripExport(Request $request)
+    {
+        // Ambil input filter
+        $search = $request->input('search');
+        $perPage = 0;
+
+        // Ambil input sorting
+        $sortField = $request->input('sort', 'id');
+        $sortDirection = $request->input('direction', 'asc');
+
+        $gpsLogs = $this->gpsLogService->getAllTrip($search, $perPage, $sortField, $sortDirection);
+
+        $fileName = 'trips_' . now('Asia/Jakarta')->format('Ymd_His') . '.csv';
+        $callback = function () use ($gpsLogs) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['No', 'Nama', 'Trip']);
+
+            $counter = 1;
+            foreach ($gpsLogs as $gpsLog) {
+                fputcsv($handle, [
+                    $counter,
+                    $gpsLog->name,
+                    $gpsLog->trip_id,
+                ]);
+                $counter++;
+            }
+            fclose($handle);
+        };
+
+        return $this->exportService->export($fileName, $callback);
     }
 
     /**

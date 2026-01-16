@@ -10,6 +10,7 @@ import {
     FaMap,
     FaListAlt,
     FaFolder,
+    FaRoute,
 } from "react-icons/fa";
 
 export default function Sidebar({
@@ -77,8 +78,8 @@ export default function Sidebar({
         },
         {
             label: "Trip",
-            icon: <FaMap />,
-            routeStr: "gps.map",
+            icon: <FaRoute />,
+            routeStr: "trips.index",
             roles: ["admin", "operator"],
         },
     ];

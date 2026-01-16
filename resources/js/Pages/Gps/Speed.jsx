@@ -28,7 +28,9 @@ export default function Speed({ devices }) {
 
         client.on("connect", () => {
             console.log("Connected to EMQX");
-            client.subscribe(MQTT_TOPIC, { qos: 0 });
+            client.subscribe(MQTT_TOPIC, { qos: 0 }, (err) => {
+                if (err) console.log(`Subscribe ${topic} error:`, err);
+            });
         });
 
         client.on("message", (topic, message) => {

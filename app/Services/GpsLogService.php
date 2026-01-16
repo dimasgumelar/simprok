@@ -20,6 +20,11 @@ class GpsLogService
         return $this->gpsLogRepo->all($search, $perPage, $sortField, $sortDirection);
     }
 
+    public function getAllTrip($search, $perPage, $sortField, $sortDirection)
+    {
+        return $this->gpsLogRepo->allTrip($search, $perPage, $sortField, $sortDirection);
+    }
+
     public function getAllGrouped($search, $perPage, $sortField, $sortDirection)
     {
         $points = $this->gpsLogRepo->all($search, $perPage, $sortField, $sortDirection);

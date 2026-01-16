@@ -7,7 +7,7 @@ import Pagination from "@/Components/Pagination";
 import TableNotFound from "@/Components/TableNotFound";
 import TableSearch from "@/Components/TableSearch";
 import { parseDateTime } from "@/utils/helper-function";
-import { DownloadButton } from "@/Components/Button";
+import { DownloadButton, ViewButton } from "@/Components/Button";
 import { inertiaGet } from "@/utils/helper-function";
 import { BreadcrumbsTrips } from "@/Pages/Trips/Constant";
 
@@ -20,7 +20,7 @@ export default function TripsIndex({ trips }) {
     const [sortDirection, setSortDirection] = useState("");
 
     function applyFilters(overrides = {}) {
-        inertiaGet("gpslogs.index", {
+        inertiaGet("trips.index", {
             page: 1,
             per_page: perPage,
             search: search,
@@ -51,7 +51,7 @@ export default function TripsIndex({ trips }) {
     }
 
     function handleExport() {
-        window.location.href = route("gpslogs.export", {
+        window.location.href = route("trips.export", {
             search: search,
             sort: sortField,
             direction: sortDirection,
@@ -60,7 +60,7 @@ export default function TripsIndex({ trips }) {
 
     return (
         <AuthenticatedLayout>
-            <Head title="Gps Log" />
+            <Head title="Trip" />
             <div className="card bg-base-100 shadow-sm w-full">
                 <div className="card-body">
                     <Breadcrumbs list={breadcrumbs} />
@@ -95,33 +95,13 @@ export default function TripsIndex({ trips }) {
                                         onSort={handleSort}
                                     />
                                     <SortableHeader
-                                        label="Latitude"
-                                        column="latitude"
-                                        sortField={sortField}
-                                        sortDirection={sortDirection}
-                                        onSort={handleSort}
-                                    />
-                                    <SortableHeader
-                                        label="Longitude"
-                                        column="longitude"
-                                        sortField={sortField}
-                                        sortDirection={sortDirection}
-                                        onSort={handleSort}
-                                    />
-                                    <SortableHeader
-                                        label="Kecepatan"
-                                        column="speed"
-                                        sortField={sortField}
-                                        sortDirection={sortDirection}
-                                        onSort={handleSort}
-                                    />
-                                    <SortableHeader
                                         label="Tanggal Direkam"
                                         column="recorded_at"
                                         sortField={sortField}
                                         sortDirection={sortDirection}
                                         onSort={handleSort}
                                     />
+                                    <td></td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,13 +121,18 @@ export default function TripsIndex({ trips }) {
                                             </th>
                                             <td>{trip.name}</td>
                                             <td>{trip.trip_id}</td>
-                                            <td>{trip.latitude}</td>
-                                            <td>{trip.longitude}</td>
-                                            <td>{trip.speed}</td>
                                             <td>
                                                 {parseDateTime(
                                                     trip.recorded_at
                                                 )}
+                                            </td>
+                                            <td>
+                                                <ViewButton
+                                                    route={route(
+                                                        "devices.view",
+                                                        trip.trip_id
+                                                    )}
+                                                />
                                             </td>
                                         </tr>
                                     ))
