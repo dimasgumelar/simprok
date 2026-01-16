@@ -148,6 +148,24 @@ class GpsLogController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+
+    public function showTrip($tripId)
+    {
+        return Inertia::render('Trips/TripView', compact('tripId'));
+    }
+
+    public function fetchTripData(Request $request, $tripId)
+    {
+        $page = $request->input('page', 1);
+
+        $trips = $this->gpsLogService->findByTripId($tripId, 100); // per page 1.000
+
+        return response()->json($trips);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(GpsLog $gpsLog)

@@ -129,7 +129,7 @@ export default function TripsIndex({ trips }) {
                                             <td>
                                                 <ViewButton
                                                     route={route(
-                                                        "devices.view",
+                                                        "trips.view",
                                                         trip.trip_id
                                                     )}
                                                 />

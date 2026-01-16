@@ -60,6 +60,11 @@ class GpsLogRepository
         return $gpsLogs;
     }
 
+    public function findBytripId($tripId, $perPage)
+    {
+        return GpsLog::where('trip_id', '=', $tripId)->orderBy('recorded_at', 'asc')->paginate($perPage);
+    }
+
     public function find($id)
     {
         return GpsLog::find($id);

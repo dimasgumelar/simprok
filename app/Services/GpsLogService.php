@@ -91,7 +91,10 @@ class GpsLogService
         return $results;
     }
 
-
+    public function findBytripId($tripdId, $perPage = 1000)
+    {
+        return $this->gpsLogRepo->findBytripId($tripdId, $perPage);
+    }
 
     public function getById($id)
     {

@@ -137,7 +137,7 @@ export default function Speed({ devices }) {
                             options={options}
                             series={series}
                             type="line"
-                            height={500}
+                            height={400}
                         />
                     </div>
                 </div>

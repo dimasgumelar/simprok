@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import mqtt from "mqtt";
@@ -15,10 +15,6 @@ import {
 export default function Map({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState([]);
     const [devicePositions, setDevicePositions] = useState({});
-
-    const clientId = "emqx_test_" + Math.random().toString(16).substring(2, 8);
-    const username = "simprok-web";
-    const password = "simprok-web";
 
     useEffect(() => {
         const client = mqtt.connect(MQTT_BROKE_URL, {
