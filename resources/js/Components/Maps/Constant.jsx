@@ -2,8 +2,8 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 
-export const MI_BLAVK = "/leaflet/marker-icon-black.png";
-export const MI_BLAVK_2X = "/leaflet/marker-icon-2x-black.png";
+export const MI_BLACK = "/leaflet/marker-icon-black.png";
+export const MI_BLACK_2X = "/leaflet/marker-icon-2x-black.png";
 export const MI_BLUE = "/leaflet/marker-icon-blue.png";
 export const MI_BLUE_2X = "/leaflet/marker-icon-2x-blue.png";
 export const MI_GOLD = "/leaflet/marker-icon-gold.png";

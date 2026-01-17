@@ -13,7 +13,9 @@ import {
 } from "@/utils/constants";
 
 export default function Map({ devices }) {
-    const [selectedDevices, setSelectedDevices] = useState([]);
+    const [selectedDevices, setSelectedDevices] = useState(
+        devices.map((d) => d.identifier)
+    );
     const [devicePositions, setDevicePositions] = useState({});
 
     useEffect(() => {
@@ -26,19 +28,23 @@ export default function Map({ devices }) {
         client.on("connect", () => {
             console.log("Connected to EMQX");
             client.subscribe(MQTT_TOPIC, { qos: 0 }, (err) => {
-                if (err) console.log(`Subscribe ${topic} error:`, err);
+                if (err) console.log("Subscribe error:", err);
             });
         });
 
         client.on("message", (topic, message) => {
             try {
-                console.log(message);
                 const payload = JSON.parse(message.toString());
-                const { device_id, latitude, longitude } = payload;
+                const { device_id, latitude, longitude, speed } = payload;
 
                 setDevicePositions((prev) => ({
                     ...prev,
-                    [device_id]: { id: device_id, latitude, longitude },
+                    [device_id]: {
+                        id: device_id,
+                        latitude,
+                        longitude,
+                        speed,
+                    },
                 }));
             } catch (e) {
                 console.error("Invalid JSON payload", e);
@@ -48,30 +54,37 @@ export default function Map({ devices }) {
         return () => client.end();
     }, []);
 
-    function toggleDevice(deviceIdentifier) {
-        const updatedDevices = selectedDevices.includes(deviceIdentifier)
-            ? selectedDevices.filter((r) => r !== deviceIdentifier)
-            : [...selectedDevices, deviceIdentifier];
-
-        setSelectedDevices(updatedDevices);
+    function toggleDevice(id) {
+        setSelectedDevices((prev) =>
+            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+        );
     }
+
+    // Ambil hanya posisi device yg dipilih
+    const visiblePositions = Object.values(devicePositions)
+        .filter((d) => selectedDevices.includes(d.id))
+        .map((pos) => ({
+            ...pos,
+            name: devices.find((x) => x.identifier === pos.id)?.name ?? pos.id,
+        }));
 
     return (
         <AuthenticatedLayout>
-            <Head title="Kecepatan" />
+            <Head title="Peta Perangkat" />
             <div className="card bg-base-100 shadow-sm w-full">
                 <div className="card-body">
                     <div className="flex items-center justify-end mb-4">
                         <TableDropdown
                             title="Pilih Perangkat"
-                            // icon={<FaUserShield />}
                             list={devices}
                             selectedList={selectedDevices}
                             toggleItem={toggleDevice}
+                            keyId="identifier"
                         />
                     </div>
+
                     <div className="overflow-x-auto">
-                        <MapView devices={Object.values(devicePositions)} />
+                        <MapView devices={visiblePositions} />
                     </div>
                 </div>
             </div>
