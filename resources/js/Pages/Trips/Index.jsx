@@ -128,10 +128,11 @@ export default function TripsIndex({ trips }) {
                                             </td>
                                             <td>
                                                 <ViewButton
-                                                    route={route(
-                                                        "trips.view",
-                                                        trip.trip_id
-                                                    )}
+                                                    route={route("trips.view", {
+                                                        identifier:
+                                                            trip.identifier,
+                                                        tripId: trip.trip_id,
+                                                    })}
                                                 />
                                             </td>
                                         </tr>

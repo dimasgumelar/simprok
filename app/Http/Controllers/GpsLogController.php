@@ -151,16 +151,17 @@ class GpsLogController extends Controller
      * Display the specified resource.
      */
 
-    public function showTrip($tripId)
+    public function showTrip($identifier, $tripId)
     {
-        return Inertia::render('Trips/TripView', compact('tripId'));
+        return Inertia::render('Trips/TripView', [
+            'identifier' => $identifier,
+            'tripId' => $tripId,
+        ]);
     }
 
-    public function fetchTripData(Request $request, $tripId)
+    public function fetchTripData($identifier, $tripId)
     {
-        $page = $request->input('page', 1);
-
-        $trips = $this->gpsLogService->findByTripId($tripId, 100); // per page 1.000
+        $trips = $this->gpsLogService->findByTripId($identifier, $tripId, 1000); // per page 1.000
 
         return response()->json($trips);
     }

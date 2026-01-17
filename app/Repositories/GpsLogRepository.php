@@ -34,7 +34,7 @@ class GpsLogRepository
     public function allTrip($search, $perPage, $sortField, $sortDirection)
     {
         $query = GpsLog::query()
-            ->select('gps_logs.trip_id', 'devices.name', DB::raw('MIN(gps_logs.recorded_at) as recorded_at'))
+            ->select('gps_logs.trip_id', 'devices.name', DB::raw('MIN(devices.identifier) as identifier'), DB::raw('MIN(gps_logs.recorded_at) as recorded_at'))
             ->join('devices', 'gps_logs.device_id', '=', 'devices.id');
 
         if ($search) {
@@ -60,9 +60,9 @@ class GpsLogRepository
         return $gpsLogs;
     }
 
-    public function findBytripId($tripId, $perPage)
+    public function findBytripId($deviceId, $tripId, $perPage)
     {
-        return GpsLog::where('trip_id', '=', $tripId)->orderBy('recorded_at', 'asc')->paginate($perPage);
+        return GpsLog::where('device_id', '=', $deviceId)->where('trip_id', '=', $tripId)->orderBy('recorded_at', 'asc')->paginate($perPage);
     }
 
     public function find($id)

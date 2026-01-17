@@ -31,6 +31,11 @@ class DeviceRepository
         return Device::find($id);
     }
 
+    public function findByIdentifier($identifier)
+    {
+        return Device::where('identifier', '=', $identifier)->firstOrFail();
+    }
+
     public function create($data): Device
     {
         return Device::create($data);

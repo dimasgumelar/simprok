@@ -51,8 +51,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     
     Route::get('/trip', [GpsLogController::class, 'tripIndex'])->name('trips.index');
     Route::get('/trip/export', [GpsLogController::class, 'tripExport'])->name('trips.export');
-    Route::get('/trip/{tripId}/view', [GpsLogController::class, 'showTrip'])->name('trips.view');
-    Route::get('/api/trip/{tripId}', [GpsLogController::class, 'fetchTripData']);
+    Route::get('/trip/{identifier}/view/{tripId}', [GpsLogController::class, 'showTrip'])->name('trips.view');
+    Route::get('/api/trip/{identifier}/{tripId}', [GpsLogController::class, 'fetchTripData']);
 
     Route::get('/speed', [GpsController::class, 'speed'])->name('gps.speed');
     Route::get('/map', [GpsController::class, 'map'])->name('gps.map');

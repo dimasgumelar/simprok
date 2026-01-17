@@ -11,6 +11,7 @@ import {
     MQTT_TOPIC,
     MQTT_CLIENT_ID,
 } from "@/utils/constants";
+import SpeedometerCircle from "@/Components/Speedometer";
 
 export default function Map({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState(
@@ -85,6 +86,26 @@ export default function Map({ devices }) {
 
                     <div className="overflow-x-auto">
                         <MapView devices={visiblePositions} />
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 place-items-center">
+                            {visiblePositions.map((dev) => (
+                                <div
+                                    className="card w-60 shadow-sm"
+                                    key={dev.id}
+                                >
+                                    <div className="card-body items-center">
+                                        <div className="font-bold text-md">
+                                            {dev.name}
+                                        </div>
+
+                                        <SpeedometerCircle
+                                            max={150}
+                                            speed={dev.speed ?? 0}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

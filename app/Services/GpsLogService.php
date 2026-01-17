@@ -2,17 +2,20 @@
 namespace App\Services;
 
 use App\Models\GpsLog;
+use App\Repositories\DeviceRepository;
 use App\Repositories\GpsLogRepository;
 
 class GpsLogService
 {
     protected $gpsLogRepo;
     protected $geoService;
+    protected $deviceRepo;
 
-    public function __construct(GpsLogRepository $gpsLogRepo, GeoService $geoService)
+    public function __construct(GpsLogRepository $gpsLogRepo, GeoService $geoService, DeviceRepository $deviceRepo)
     {
         $this->gpsLogRepo = $gpsLogRepo;
         $this->geoService = $geoService;
+        $this->deviceRepo = $deviceRepo;
     }
 
     public function getAll($search, $perPage, $sortField, $sortDirection)
@@ -91,9 +94,14 @@ class GpsLogService
         return $results;
     }
 
-    public function findBytripId($tripdId, $perPage = 1000)
+    public function findBytripId($identifier, $tripdId, $perPage = 1000)
     {
-        return $this->gpsLogRepo->findBytripId($tripdId, $perPage);
+        $device = $this->deviceRepo->findByIdentifier($identifier);
+        if (!$device) {
+            return $device;
+        }
+
+        return $this->gpsLogRepo->findBytripId($device->id, $tripdId, $perPage);
     }
 
     public function getById($id)

@@ -27,15 +27,15 @@ import {
 } from "./Constant";
 
 const icons = [
-    makeIcon(MI_BLACK, MI_BLACK_2X),
     makeIcon(MI_BLUE, MI_BLUE_2X),
-    makeIcon(MI_GOLD, MI_GOLD_2X),
-    makeIcon(MI_GREEN, MI_GREEN_2X),
-    makeIcon(MI_GREY, MI_GREY_2X),
-    makeIcon(MI_ORANGE, MI_ORANGE_2X),
     makeIcon(MI_RED, MI_RED_2X),
-    makeIcon(MI_VIOLET, MI_VIOLET_2X),
     makeIcon(MI_YELLOW, MI_YELLOW_2X),
+    makeIcon(MI_GREEN, MI_GREEN_2X),
+    makeIcon(MI_BLACK, MI_BLACK_2X),
+    makeIcon(MI_GREY, MI_GREY_2X),
+    makeIcon(MI_GOLD, MI_GOLD_2X),
+    makeIcon(MI_VIOLET, MI_VIOLET_2X),
+    makeIcon(MI_ORANGE, MI_ORANGE_2X),
 ];
 
 // default marker shadow
@@ -51,13 +51,7 @@ function createLegend(map, icons, devices) {
     const legend = L.control({ position: "bottomleft" });
 
     legend.onAdd = function () {
-        const div = L.DomUtil.create("div", "info legend");
-        div.style.background = "white";
-        div.style.padding = "8px 10px";
-        div.style.borderRadius = "6px";
-        div.style.fontSize = "12px";
-        div.style.boxShadow = "0 0 5px rgba(0,0,0,0.3)";
-
+        const div = L.DomUtil.create("div", "legend");
         div.innerHTML = devices
             .map((d, i) => {
                 const icon = icons[i % icons.length];

@@ -58,3 +58,11 @@ export const MQTT_CLIENT_ID = () => {
 
 export const FONT_FAMILY =
     'Figtree, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+
+export const COLOR_PRIMARY = "var(--color-primary)";
+export const COLOR_SECONDARY = "var(--color-secondary)";
+export const COLOR_SUCCESS = "var(--color-success)";
+export const COLOR_WARNING = "var(--color-warning)";
+export const COLOR_INFO = "var(--color-info)";
+export const COLOR_ERROR = "var(--color-error)";
+export const COLOR_NEUTRAL = "var(--color-neutral)";

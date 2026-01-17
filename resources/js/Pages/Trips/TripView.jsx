@@ -4,7 +4,7 @@ import axios from "axios";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TripMap from "@/Components/Maps/TripMap";
 
-export default function TripView({ tripId }) {
+export default function TripView({ identifier, tripId }) {
     const [trips, setTrips] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -14,7 +14,9 @@ export default function TripView({ tripId }) {
 
         const loadPage = async () => {
             try {
-                const res = await axios.get(`/api/trip/${tripId}?page=${page}`);
+                const res = await axios.get(
+                    `/api/trip/${identifier}/${tripId}?page=${page}`
+                );
                 const batch = res.data.data;
 
                 if (!stop && batch.length > 0) {
