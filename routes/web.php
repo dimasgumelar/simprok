@@ -36,7 +36,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::post('/users/{user}/delete', [UserController::class, 'destroy'])->name('users.destroy');
-    
+});
+
+Route::middleware(['auth', 'role:admin|operator'])->group(function () {
     Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');
     Route::get('/devices/export', [DeviceController::class, 'export'])->name('devices.export');
     Route::get('/devices/create', [DeviceController::class, 'create'])->name('devices.create');
@@ -55,7 +57,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/api/trip/{identifier}/{tripId}', [GpsLogController::class, 'fetchTripData']);
 
     Route::get('/speed', [GpsController::class, 'speed'])->name('gps.speed');
-    Route::get('/map', [GpsController::class, 'map'])->name('gps.map');
+    // Route::get('/map', [GpsController::class, 'map'])->name('gps.map');
+    Route::get('/trip-map', [GpsController::class, 'tripMap'])->name('gps.tripMap');
 });
 
 require __DIR__.'/auth.php';

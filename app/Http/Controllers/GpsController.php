@@ -50,6 +50,14 @@ class GpsController extends Controller
         ]);
     }
 
+    public function tripMap(Request $request)
+    {
+        $devices = $this->deviceService->getAll(null, 0, null, null);
+        return Inertia::render('Gps/TripMap', [
+            'devices' => $devices
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

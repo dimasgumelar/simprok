@@ -5,6 +5,9 @@ export default function SpeedometerCircle({ speed = 0, max = 100 }) {
     const percentage = Math.min(speed / max, 1);
     const angle = percentage * 180;
 
+    const dashArray = 126;
+    const dashOffset = dashArray - dashArray * percentage;
+
     return (
         <div className="flex flex-col items-center">
             <svg
@@ -22,18 +25,21 @@ export default function SpeedometerCircle({ speed = 0, max = 100 }) {
                     strokeLinecap="round"
                 />
 
-                {/* Colored arc */}
+                {/* Colored arc with animation */}
                 <path
                     d="M10 40 A40 40 0 0 1 90 40"
                     fill="none"
                     stroke={COLOR_PRIMARY}
                     strokeWidth="10"
                     strokeLinecap="round"
-                    strokeDasharray="126"
-                    strokeDashoffset={126 - 126 * percentage}
+                    strokeDasharray={dashArray}
+                    strokeDashoffset={dashOffset}
+                    style={{
+                        transition: "stroke-dashoffset 0.4s ease-out",
+                    }}
                 />
 
-                {/* Needle */}
+                {/* Needle with animation */}
                 <line
                     x1="50"
                     y1="40"
@@ -42,6 +48,9 @@ export default function SpeedometerCircle({ speed = 0, max = 100 }) {
                     stroke={COLOR_ERROR}
                     strokeWidth="3"
                     strokeLinecap="round"
+                    style={{
+                        transition: "all 0.4s ease-out",
+                    }}
                 />
 
                 {/* Speed text */}

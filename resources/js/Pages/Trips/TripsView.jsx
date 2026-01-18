@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Head } from "@inertiajs/react";
 import axios from "axios";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import TripMap from "@/Components/Maps/TripMap";
+import TripMap from "@/Components/Maps/TripView";
 
-export default function TripView({ identifier, tripId }) {
+export default function TripsView({ identifier, tripId }) {
     const [trips, setTrips] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);

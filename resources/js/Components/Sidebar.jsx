@@ -70,10 +70,16 @@ export default function Sidebar({
             routeStr: "gps.speed",
             roles: ["admin", "operator"],
         },
+        // {
+        //     label: "Peta",
+        //     icon: <FaMap />,
+        //     routeStr: "gps.map",
+        //     roles: ["admin", "operator"],
+        // },
         {
-            label: "Peta",
+            label: "Trip Peta",
             icon: <FaMap />,
-            routeStr: "gps.map",
+            routeStr: "gps.tripMap",
             roles: ["admin", "operator"],
         },
         {

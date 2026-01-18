@@ -86,9 +86,9 @@ const MapView = ({
 
         const map = L.map("map").setView([defaultLat, defaultLng], zoom);
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: "&copy; OpenStreetMap contributors",
-        }).addTo(map);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+            map
+        );
 
         mapRef.current = map;
     }, []);

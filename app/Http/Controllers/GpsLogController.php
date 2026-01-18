@@ -153,7 +153,7 @@ class GpsLogController extends Controller
 
     public function showTrip($identifier, $tripId)
     {
-        return Inertia::render('Trips/TripView', [
+        return Inertia::render('Trips/TripsView', [
             'identifier' => $identifier,
             'tripId' => $tripId,
         ]);
