@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class GpsLog extends Model
 {
     protected $fillable = [
+        'trip_id',
         'device_id',
         'latitude',
         'longitude',

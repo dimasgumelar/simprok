@@ -109,8 +109,13 @@ class GpsLogService
         return $this->gpsLogRepo->find($id);
     }
 
-    public function create($data): GpsLog|null
+    public function create($data)
     {
+        $device = $this->deviceRepo->findByIdentifier($data['device_id']);
+        if (!$device) {
+            return $device;
+        }
+        $data['device_id'] = $device->id;
         $gpsLog = $this->gpsLogRepo->create($data);
         return $gpsLog;
     }
