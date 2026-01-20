@@ -89,7 +89,7 @@ export default function Sidebar({
             roles: ["admin", "operator"],
         },
         {
-            label: "Trip Stat",
+            label: "Trip Statistik",
             icon: <FaChartLine />,
             routeStr: "trips.stats",
             roles: ["admin", "operator"],
