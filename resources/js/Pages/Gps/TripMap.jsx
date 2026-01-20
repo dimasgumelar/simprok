@@ -15,9 +15,9 @@ import TripMapRealtime from "@/Components/Maps/TripMapRealtime";
 
 export default function TripMap({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState(
-        devices.map((d) => d.identifier)
+        devices.map((d) => d.identifier),
     );
-    const [tripStatus, setTripStatus] = useState(false);
+    const [tripStatus, setTripStatus] = useState(true);
     const [devicePositions, setDevicePositions] = useState({});
     const [tripHistoryLoaded, setTripHistoryLoaded] = useState({}); // { device_id: true }
     const tripHistoryLoadedRef = useRef({});
@@ -70,7 +70,7 @@ export default function TripMap({ devices }) {
 
                         while (!done) {
                             const res = await axios.get(
-                                `/api/trip/${device_id}/${trip_id}?page=${page}`
+                                `/api/trip/${device_id}/${trip_id}?page=${page}`,
                             );
 
                             const batch = res.data.data;
@@ -78,7 +78,7 @@ export default function TripMap({ devices }) {
 
                             batch.forEach((p) => {
                                 let tempIdentifier = devices.find(
-                                    (d) => d.id === p.device_id
+                                    (d) => d.id === p.device_id,
                                 ).identifier;
                                 if (!collected[tempIdentifier])
                                     collected[tempIdentifier] = [];
@@ -142,15 +142,15 @@ export default function TripMap({ devices }) {
 
     function toggleDevice(id) {
         setSelectedDevices((prev) =>
-            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id],
         );
     }
 
     // Group by device
     const visibleTrips = Object.fromEntries(
         Object.entries(devicePositions).filter(([id]) =>
-            selectedDevices.includes(id)
-        )
+            selectedDevices.includes(id),
+        ),
     );
 
     return (
