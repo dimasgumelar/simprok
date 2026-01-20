@@ -1,5 +1,4 @@
 import { Link } from "@inertiajs/react";
-import { list } from "postcss";
 import { useState, useEffect } from "react";
 import {
     FaHome,
@@ -43,7 +42,7 @@ export default function Sidebar({
         {
             label: "Master Data",
             icon: <FaFolder />,
-            roles: ["admin"],
+            roles: ["admin", "operator"],
             list: [
                 {
                     label: "Pengguna",
@@ -55,7 +54,7 @@ export default function Sidebar({
                     label: "Perangkat",
                     icon: <FaSatelliteDish />,
                     routeStr: "devices.index",
-                    roles: ["admin"],
+                    roles: ["admin", "operator"],
                 },
             ],
         },

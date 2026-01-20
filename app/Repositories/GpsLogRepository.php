@@ -72,7 +72,6 @@ class GpsLogRepository
 
     public function create($data): GpsLog
     {
-        // dd($data);
         return GpsLog::create($data);
     }
 

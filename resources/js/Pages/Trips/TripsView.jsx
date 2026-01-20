@@ -7,7 +7,6 @@ import TripMap from "@/Components/Maps/TripView";
 export default function TripsView({ identifier, tripId }) {
     const [trips, setTrips] = useState([]);
     const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let stop = false;
@@ -15,7 +14,7 @@ export default function TripsView({ identifier, tripId }) {
         const loadPage = async () => {
             try {
                 const res = await axios.get(
-                    `/api/trip/${identifier}/${tripId}?page=${page}`
+                    `/api/trip/${identifier}/${tripId}?page=${page}`,
                 );
                 const batch = res.data.data;
 
@@ -25,12 +24,9 @@ export default function TripsView({ identifier, tripId }) {
 
                 if (res.data.next_page_url) {
                     setPage((prev) => prev + 1);
-                } else {
-                    setLoading(false);
                 }
             } catch (err) {
                 console.error(err);
-                setLoading(false);
             }
         };
 

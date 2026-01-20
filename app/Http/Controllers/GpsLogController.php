@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\GpsLog;
 use App\Services\GpsLogService;
 use App\Services\ExportService;
 use Illuminate\Http\Request;
@@ -124,33 +123,8 @@ class GpsLogController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
-    public function show(GpsLog $gpsLog)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-
     public function showTrip($identifier, $tripId)
     {
         return Inertia::render('Trips/TripsView', [
@@ -164,29 +138,5 @@ class GpsLogController extends Controller
         $trips = $this->gpsLogService->findByTripId($identifier, $tripId, 1000); // per page 1.000
 
         return response()->json($trips);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(GpsLog $gpsLog)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, GpsLog $gpsLog)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(GpsLog $gpsLog)
-    {
-        //
     }
 }
