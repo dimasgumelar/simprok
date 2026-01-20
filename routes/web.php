@@ -4,6 +4,7 @@ use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\GpsLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GpsController;
+use App\Http\Controllers\TripStatController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
@@ -55,10 +56,13 @@ Route::middleware(['auth', 'role:admin|operator'])->group(function () {
     Route::get('/trip/export', [GpsLogController::class, 'tripExport'])->name('trips.export');
     Route::get('/trip/{identifier}/view/{tripId}', [GpsLogController::class, 'showTrip'])->name('trips.view');
     Route::get('/api/trip/{identifier}/{tripId}', [GpsLogController::class, 'fetchTripData']);
-
+    
     Route::get('/speed', [GpsController::class, 'speed'])->name('gps.speed');
     // Route::get('/map', [GpsController::class, 'map'])->name('gps.map');
     Route::get('/trip-map', [GpsController::class, 'tripMap'])->name('gps.tripMap');
+    
+    Route::get('/trip/statistics', [TripStatController::class, 'index'])->name('trips.stats');
+    Route::get('/api/trip/statistics', [TripStatController::class, 'fetchTripStatData']);
 });
 
 require __DIR__.'/auth.php';

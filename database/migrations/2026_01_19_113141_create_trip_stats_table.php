@@ -16,6 +16,7 @@ return new class extends Migration
 
             // Trip tracking
             $table->uuid('trip_id');
+            $table->foreignId('device_id')->constrained()->onDelete('cascade');
 
             // KM tracker, starting from 0,1,2...
             $table->unsignedInteger('km');
@@ -32,7 +33,9 @@ return new class extends Migration
             $table->timestamps();
 
             // Composite index so lookup is fast
-            $table->unique(['trip_id', 'km']);
+            $table->index(['device_id', 'trip_id']);   // filter utama
+            $table->index(['device_id', 'avg_speed']); // cari trip terbaik
+            $table->index(['trip_id', 'km']);
         });
     }
 

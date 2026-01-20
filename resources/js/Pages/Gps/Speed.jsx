@@ -16,7 +16,7 @@ import SpeedometerCircle from "@/Components/Speedometer";
 
 export default function Speed({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState(
-        devices.map((d) => d.identifier)
+        devices.map((d) => d.identifier),
     );
     const [deviceData, setDeviceData] = useState({});
 
@@ -118,7 +118,7 @@ export default function Speed({ devices }) {
     });
 
     const categories = uniqueTimestamps.map(
-        (ts) => new Date(ts).toISOString().split("T")[1].split(".")[0]
+        (ts) => new Date(ts).toISOString().split("T")[1].split(".")[0],
     );
 
     const options = {
@@ -135,7 +135,7 @@ export default function Speed({ devices }) {
 
     function toggleDevice(id) {
         setSelectedDevices((prev) =>
-            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id],
         );
     }
 

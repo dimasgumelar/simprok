@@ -32,6 +32,7 @@ class ProcessGpsLog implements ShouldQueue
         if (!$log) return;
 
         $tripId = $log->trip_id;
+        $deviceId = $log->device_id;
 
         // ambil log sebelumnya berdasarkan waktu
         $prevLog = GpsLog::where('trip_id', $tripId)
@@ -85,6 +86,7 @@ class ProcessGpsLog implements ShouldQueue
                 'max_speed' => $speeds->max(),
                 'p85_speed' => $p85,
                 'count_logs' => $count,
+                'device_id' => $deviceId,
             ]
         );
     }

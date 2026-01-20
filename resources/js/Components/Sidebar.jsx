@@ -11,6 +11,7 @@ import {
     FaListAlt,
     FaFolder,
     FaRoute,
+    FaChartLine,
 } from "react-icons/fa";
 
 export default function Sidebar({
@@ -86,6 +87,12 @@ export default function Sidebar({
             label: "Trip",
             icon: <FaRoute />,
             routeStr: "trips.index",
+            roles: ["admin", "operator"],
+        },
+        {
+            label: "Trip Stat",
+            icon: <FaChartLine />,
+            routeStr: "trips.stats",
             roles: ["admin", "operator"],
         },
     ];
@@ -172,13 +179,15 @@ export default function Sidebar({
                                                     className={`tooltip tooltip-right min-h-[36px] flex items-center gap-3 px-4 py-2 rounded text-sm
                                                                     ${
                                                                         isActive(
-                                                                            child.routeStr
+                                                                            child.routeStr,
                                                                         )
                                                                             ? "bg-primary text-white"
                                                                             : "hover:bg-primary hover:text-white"
                                                                     } ${
-                                                        open ? "ml-8" : ""
-                                                    }`}
+                                                                        open
+                                                                            ? "ml-8"
+                                                                            : ""
+                                                                    }`}
                                                 >
                                                     {child.icon}
                                                     {open && (

@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DeviceSeeder::class,
             GpsLogSeeder::class,
+            TripStatSeeder::class,
         ]);    
     }
 }
