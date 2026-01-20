@@ -76,11 +76,11 @@ class GpsLogRepository
         return GpsLog::create($data);
     }
 
-    public function update($device, $data)
+    public function update($gpsLog, $data)
     {
-        $device->update($data);
+        $gpsLog->update($data);
 
-        return $device;
+        return $gpsLog;
     }
 
     public function delete($device)

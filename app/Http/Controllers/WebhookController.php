@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessGpsLog;
 use App\Services\GpsLogService;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,9 @@ class WebhookController extends Controller
             'trip_id'     => 'required|uuid',
         ]);
         
-        $this->gpsLogService->create($data);
+        $gpsLog = $this->gpsLogService->create($data);
+
+        ProcessGpsLog::dispatch($gpsLog->id);
         
         return response()->json(['status' => 'ok']);
     }

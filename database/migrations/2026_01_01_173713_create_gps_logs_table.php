@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('device_id')->constrained()->onDelete('cascade');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
+            $table->decimal('total_distance_km', 10, 3)->default(0);
             $table->float('speed'); // km/h
             $table->timestamp('recorded_at');
             $table->timestamps();
