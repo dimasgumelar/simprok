@@ -68,6 +68,26 @@ export function parseDateTime(params) {
     }
 }
 
+export function parseDateTimeFull(params) {
+    if (params) {
+        const date = new Date(params);
+
+        return date
+            .toLocaleString("id-ID", {
+                weekday: "long",
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+            })
+            .replaceAll(".", ":");
+    } else {
+        return "-";
+    }
+}
+
 export function showValueOrDash(params) {
     if (params) {
         return params;

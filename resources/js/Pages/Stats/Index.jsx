@@ -41,24 +41,24 @@ export default function StatsIndex() {
 
     const avgOptions = {
         chart: {
-            id: "speed-realtime",
+            id: "avg-speed-realtime",
             animations: { enabled: true },
             fontFamily: FONT_FAMILY,
         },
         xaxis: { categories: avgCategories },
-        stroke: { curve: "smooth" },
+        stroke: { curve: "stepline" },
         yaxis: { min: 0, max: 150, title: { text: "Km/jam" } },
         title: { text: "Rata Rata Kecepatan Kendaraan (Km/Jam)" },
     };
 
     const p85Options = {
         chart: {
-            id: "speed-realtime",
+            id: "p85-speed-realtime",
             animations: { enabled: true },
             fontFamily: FONT_FAMILY,
         },
         xaxis: { categories: p85Categories },
-        stroke: { curve: "smooth" },
+        stroke: { curve: "stepline" },
         yaxis: { min: 0, max: 150, title: { text: "Km/jam" } },
         title: { text: "Persentil 85 Kecepatan Kendaraan (Km/Jam)" },
     };
@@ -68,26 +68,24 @@ export default function StatsIndex() {
             <Head title="Trip Stats" />
             <div className="card bg-base-100 shadow-sm w-full">
                 <div className="card-body">
-                    <div className="overflow-x-auto space-y-6">
-                        {/* Chart Avg */}
-                        <div>
-                            <Chart
-                                options={avgOptions}
-                                series={avgSeries}
-                                type="line"
-                                height={400}
-                            />
-                        </div>
+                    {/* Chart Avg */}
+                    <div className="w-5/6 mx-auto">
+                        <Chart
+                            options={avgOptions}
+                            series={avgSeries}
+                            type="line"
+                            height={400}
+                        />
+                    </div>
 
-                        {/* Chart P85 */}
-                        <div>
-                            <Chart
-                                options={p85Options}
-                                series={p85Series}
-                                type="line"
-                                height={400}
-                            />
-                        </div>
+                    {/* Chart P85 */}
+                    <div className="w-5/6 mx-auto">
+                        <Chart
+                            options={p85Options}
+                            series={p85Series}
+                            type="line"
+                            height={400}
+                        />
                     </div>
                 </div>
             </div>

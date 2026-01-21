@@ -6,7 +6,7 @@ import Breadcrumbs from "@/Components/Breadcrumbs";
 import Pagination from "@/Components/Pagination";
 import TableNotFound from "@/Components/TableNotFound";
 import TableSearch from "@/Components/TableSearch";
-import { parseDateTime } from "@/utils/helper-function";
+import { parseDateTimeFull } from "@/utils/helper-function";
 import { DownloadButton } from "@/Components/Button";
 import { inertiaGet } from "@/utils/helper-function";
 import { BreadcrumbsGpsLogs } from "@/Pages/GpsLogs/Constant";
@@ -145,8 +145,8 @@ export default function GpsLogsIndex({ gpsLogs }) {
                                             <td>{gpsLog.longitude}</td>
                                             <td>{gpsLog.speed}</td>
                                             <td>
-                                                {parseDateTime(
-                                                    gpsLog.recorded_at
+                                                {parseDateTimeFull(
+                                                    gpsLog.recorded_at,
                                                 )}
                                             </td>
                                         </tr>
