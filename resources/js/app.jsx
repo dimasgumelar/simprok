@@ -6,6 +6,9 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import "leaflet/dist/leaflet.css";
 
+document.documentElement.setAttribute("data-theme", "light");
+document.documentElement.classList.remove("dark");
+
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
 createInertiaApp({
@@ -13,7 +16,7 @@ createInertiaApp({
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.jsx`,
-            import.meta.glob("./Pages/**/*.jsx")
+            import.meta.glob("./Pages/**/*.jsx"),
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
@@ -21,7 +24,7 @@ createInertiaApp({
 
         root.render(
             // <UserProvider initialUser={user}>
-            <App {...props} />
+            <App {...props} />,
             // </UserProvider>
         );
     },
