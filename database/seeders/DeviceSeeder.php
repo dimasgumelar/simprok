@@ -14,7 +14,7 @@ class DeviceSeeder extends Seeder
     public function run(): void
     {
         $listName = ['Motor', 'Mobil', 'Truk', 'Bus'];
-        for ($i=1; $i <=4 ; $i++) { 
+        for ($i=0; $i <4 ; $i++) { 
             Device::create([
                 'name' => $listName[$i],
                 'type' => 'microcontroller',
