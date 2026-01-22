@@ -112,7 +112,7 @@ export default function TripsIndex({ trips }) {
                                     />
                                 ) : (
                                     trips.data.map((trip, index) => (
-                                        <tr key={trip.id}>
+                                        <tr key={trip.trip_id}>
                                             <th>
                                                 {(trips.current_page - 1) *
                                                     trips.per_page +
@@ -123,7 +123,7 @@ export default function TripsIndex({ trips }) {
                                             <td>{trip.trip_id}</td>
                                             <td>
                                                 {parseDateTime(
-                                                    trip.recorded_at
+                                                    trip.recorded_at,
                                                 )}
                                             </td>
                                             <td>

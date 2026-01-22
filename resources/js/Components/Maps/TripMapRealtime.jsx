@@ -24,20 +24,31 @@ import {
     MI_ORANGE,
     MI_ORANGE_2X,
     MS,
+    MOTOR_1,
+    CAR_1,
+    BUS_1,
+    TRUCK_1,
 } from "./Constant";
 import { parseDateTime } from "@/utils/helper-function";
 
 // ICON POOL SAMA DENGAN MapView
 const icons = [
-    makeIcon(MI_BLUE, MI_BLUE_2X),
     makeIcon(MI_RED, MI_RED_2X),
-    makeIcon(MI_YELLOW, MI_YELLOW_2X),
     makeIcon(MI_GREEN, MI_GREEN_2X),
+    makeIcon(MI_BLUE, MI_BLUE_2X),
+    makeIcon(MI_YELLOW, MI_YELLOW_2X),
     makeIcon(MI_BLACK, MI_BLACK_2X),
     makeIcon(MI_GREY, MI_GREY_2X),
     makeIcon(MI_GOLD, MI_GOLD_2X),
     makeIcon(MI_VIOLET, MI_VIOLET_2X),
     makeIcon(MI_ORANGE, MI_ORANGE_2X),
+];
+
+const vehicleIcons = [
+    makeIcon(MOTOR_1, MOTOR_1, 40),
+    makeIcon(CAR_1, CAR_1, 55, 55),
+    makeIcon(BUS_1, BUS_1, 60, 60),
+    makeIcon(TRUCK_1, TRUCK_1, 60, 60),
 ];
 
 // Default shadow
@@ -81,6 +92,7 @@ export default function TripMapRealtime({
     const markerLayersRef = useRef({});
     const polylineLayersRef = useRef({});
     const iconMapRef = useRef({});
+    const vehicleIconsRef = useRef({});
     const legendRef = useRef(null);
 
     // Init map
@@ -89,12 +101,14 @@ export default function TripMapRealtime({
 
         const map = L.map("map").setView([defaultLat, defaultLng], zoom);
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-            map
+            map,
         );
 
         // assign icon warna ke tiap device consistent by index
         devices.forEach((d, i) => {
             iconMapRef.current[d.identifier] = icons[i % icons.length];
+            vehicleIconsRef.current[d.identifier] =
+                vehicleIcons[i % vehicleIcons.length];
         });
 
         mapRef.current = map;
@@ -117,13 +131,13 @@ export default function TripMapRealtime({
                     p.latitude &&
                     p.longitude &&
                     !isNaN(p.latitude) &&
-                    !isNaN(p.longitude)
+                    !isNaN(p.longitude),
             );
 
             // Bersihkan layer lama
             if (markerLayersRef.current[dev.identifier]) {
                 markerLayersRef.current[dev.identifier].forEach((m) =>
-                    map.removeLayer(m)
+                    map.removeLayer(m),
                 );
             }
             markerLayersRef.current[dev.identifier] = [];
@@ -154,7 +168,7 @@ export default function TripMapRealtime({
                     circle.bindPopup(
                         `<b>${dev.name}</b><br/>Kecepatan: ${
                             p.speed ?? "?"
-                        } km/h<br>${parseDateTime(p.recorded_at)}`
+                        } km/h<br>${parseDateTime(p.recorded_at)}`,
                     );
                     markerLayersRef.current[dev.identifier].push(circle);
                 });
@@ -164,12 +178,12 @@ export default function TripMapRealtime({
                     [first.latitude, first.longitude],
                     {
                         icon: iconMapRef.current[dev.identifier],
-                    }
+                    },
                 ).addTo(map);
                 startMarker.bindPopup(
                     `<b>${dev.name}</b><br/>Titik Awal<br/>Kecepatan: ${
                         first.speed ?? 0
-                    } km/h`
+                    } km/h`,
                 );
                 markerLayersRef.current[dev.identifier].push(startMarker);
             }
@@ -177,12 +191,12 @@ export default function TripMapRealtime({
             // End = icon device
             const last = clean[clean.length - 1];
             const endMarker = L.marker([last.latitude, last.longitude], {
-                icon: iconMapRef.current[dev.identifier],
+                icon: vehicleIconsRef.current[dev.identifier],
             }).addTo(map);
             endMarker.bindPopup(
                 `<b>${dev.name}</b><br/>Titik Akhir<br/>Kecepatan: ${
                     last.speed ?? 0
-                } km/h`
+                } km/h`,
             );
             markerLayersRef.current[dev.identifier].push(endMarker);
 
@@ -197,7 +211,7 @@ export default function TripMapRealtime({
         if (bounds.isValid()) map.fitBounds(bounds, { padding: [50, 50] });
 
         // Recreate legend
-        legendRef.current = createLegend(map, devices, iconMapRef.current);
+        legendRef.current = createLegend(map, devices, vehicleIconsRef.current);
     }, [trips, devices]);
 
     return <div id="map" style={{ height: "450px", width: "100%" }}></div>;

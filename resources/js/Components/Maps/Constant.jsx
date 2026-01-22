@@ -23,13 +23,28 @@ export const MI_YELLOW_2X = "/leaflet/marker-icon-2x-yellow.png";
 export const MI = markerIcon;
 export const MS = markerShadow;
 export const MI_2X = markerIcon2x;
+export const MOTOR_1 = "/leaflet/motor-1.png";
+export const CAR_1 = "/leaflet/car-1.png";
+export const BUS_1 = "/leaflet/bus-1.png";
+export const TRUCK_1 = "/leaflet/truck-1.png";
 
-export const makeIcon = (icon, icon2x) => {
+export const makeIcon = (icon, icon2x, iconLength = 25, iconHeight = 41) => {
     return new L.Icon({
         iconUrl: icon,
         iconRetinaUrl: icon2x,
         shadowUrl: MS,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
+        iconSize: [iconLength, iconHeight],
+        iconAnchor: [iconLength / 2, 41],
     });
 };
+
+// export const makeIconFa = (faIcon) => {
+//     const iconHtml = ReactDOMServer.renderToString(faIcon);
+
+//     return L.divIcon({
+//         html: iconHtml,
+//         className: "",
+//         iconSize: [32, 32],
+//         iconAnchor: [16, 32],
+//     });
+// };
