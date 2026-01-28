@@ -62,7 +62,9 @@ class GpsLogRepository
 
     public function findBytripId($deviceId, $tripId, $perPage)
     {
-        return GpsLog::where('device_id', '=', $deviceId)->where('trip_id', '=', $tripId)->orderBy('recorded_at', 'asc')->paginate($perPage);
+        $query = GpsLog::where('device_id', '=', $deviceId)->where('trip_id', '=', $tripId)->orderBy('recorded_at', 'asc');
+        $data = $perPage ? $query->paginate($perPage) : $query->get();
+        return $data;
     }
 
     public function find($id)

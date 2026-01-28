@@ -117,16 +117,24 @@ export default function Speed({ devices }) {
         };
     });
 
-    const categories = uniqueTimestamps.map(
-        (ts) => new Date(ts).toISOString().split("T")[1].split(".")[0],
-    );
-
     const options = {
         chart: { id: "speed-realtime", animations: { enabled: true } },
-        xaxis: { categories },
+        xaxis: {
+            title: {
+                text: "Waktu",
+            },
+        },
         stroke: { curve: "smooth" },
-        yaxis: { min: 0, max: 150, title: { text: "Km/jam" } },
-        title: { text: "Kecepatan Kendaraan (Km/Jam)" },
+        yaxis: {
+            min: 0,
+            max: 150,
+            tickAmount: 6,
+            labels: {
+                formatter: (val) => Math.round(val),
+            },
+            title: { text: "Kecepatan (Km/jam)" },
+        },
+        title: { text: "Kecepatan Kendaraan" },
         chart: {
             id: "speed-realtime",
             fontFamily: FONT_FAMILY,
@@ -144,6 +152,9 @@ export default function Speed({ devices }) {
             <Head title="Kecepatan" />
             <div className="card bg-base-100 shadow-sm w-full">
                 <div className="card-body">
+                    <h2 className="font-bold text-lg text-center">
+                        Kecepatan Realtime
+                    </h2>
                     <div className="flex justify-end mb-4">
                         <TableDropdown
                             title="Pilih Perangkat"

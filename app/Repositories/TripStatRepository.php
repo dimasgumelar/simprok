@@ -31,13 +31,12 @@ class TripStatRepository
         return $bestP85Trips;
     }
 
-    public function findBytripId($tripId, $deviceId)
+    public function findBytripId($tripId, $deviceId, $isFull = false)
     {
-        $stats = TripStat::where('device_id', $deviceId)
+        $query = TripStat::where('device_id', $deviceId)
             ->where('trip_id', $tripId)
-            ->orderBy('km')
-            ->get(['km', 'avg_speed', 'p85_speed']);
+            ->orderBy('km');
 
-        return $stats;
+        return $isFull ? $query->get() : $query->get(['km', 'avg_speed', 'p85_speed']);
     }
 }

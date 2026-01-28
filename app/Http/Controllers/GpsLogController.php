@@ -122,6 +122,18 @@ class GpsLogController extends Controller
         return $this->exportService->export($fileName, $callback);
     }
 
+    public function tripExportById($type, $identifier, $tripId)
+    {
+        $fileName = 'trip_'. $type . "_" . $tripId . "-" . now('Asia/Jakarta')->format('Ymd_His') . '.csv';
+        $callback = $this->gpsLogService->tripExportById($type, $identifier, $tripId);
+        if (!$callback) {
+            return response()->json([
+                'message' => 'Tipe export tidak valid',
+            ], 400);
+        }
+        return $this->exportService->export($fileName, $callback);
+    }
+
     /**
      * Display the specified resource.
      */

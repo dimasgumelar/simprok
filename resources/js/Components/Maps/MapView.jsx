@@ -72,8 +72,8 @@ function createLegend(map, icons, devices) {
 
 const MapView = ({
     devices = [],
-    defaultLat = -7.2898,
-    defaultLng = 112.7151,
+    defaultLat = -6.984172111030562,
+    defaultLng = 110.41259842198662,
     zoom = 13,
 }) => {
     const mapRef = useRef(null);
@@ -87,7 +87,7 @@ const MapView = ({
         const map = L.map("map").setView([defaultLat, defaultLng], zoom);
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-            map
+            map,
         );
 
         mapRef.current = map;
@@ -112,13 +112,13 @@ const MapView = ({
                 markersRef.current[d.id]
                     .setLatLng([lat, lng])
                     .setPopupContent(
-                        `<b>${d.name}</b><br/>Kecepatan: ${d.speed ?? 0} km/h`
+                        `<b>${d.name}</b><br/>Kecepatan: ${d.speed ?? 0} km/h`,
                     )
                     .setIcon(icon);
             } else {
                 const marker = L.marker([lat, lng], { icon }).addTo(map);
                 marker.bindPopup(
-                    `<b>${d.name}</b><br/>Kecepatan: ${d.speed ?? 0} km/h`
+                    `<b>${d.name}</b><br/>Kecepatan: ${d.speed ?? 0} km/h`,
                 );
                 markersRef.current[d.id] = marker;
             }

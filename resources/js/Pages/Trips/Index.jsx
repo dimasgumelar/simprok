@@ -10,6 +10,7 @@ import { parseDateTime } from "@/utils/helper-function";
 import { DownloadButton, ViewButton } from "@/Components/Button";
 import { inertiaGet } from "@/utils/helper-function";
 import { BreadcrumbsTrips } from "@/Pages/Trips/Constant";
+import { FaDownload } from "react-icons/fa";
 
 export default function TripsIndex({ trips }) {
     const breadcrumbs = [<BreadcrumbsTrips />, "Daftar"];
@@ -55,6 +56,14 @@ export default function TripsIndex({ trips }) {
             search: search,
             sort: sortField,
             direction: sortDirection,
+        });
+    }
+
+    function handleTripExport(type, identifier, trip_id) {
+        window.location.href = route("trip.export", {
+            type: type,
+            identifier: identifier,
+            tripId: trip_id,
         });
     }
 
@@ -134,6 +143,48 @@ export default function TripsIndex({ trips }) {
                                                         tripId: trip.trip_id,
                                                     })}
                                                 />
+                                                <div
+                                                    key={trip.trip_id}
+                                                    className={`dropdown dropdown-end ${index == trips.data.length - 1 ? "dropdown-top" : ""}`}
+                                                >
+                                                    <div
+                                                        tabIndex={0}
+                                                        role="button"
+                                                        className="btn btn-sm btn-secondary ml-2"
+                                                    >
+                                                        <FaDownload />
+                                                        <span className="hidden sm:flex">
+                                                            Unduh
+                                                        </span>
+                                                    </div>
+                                                    <ul
+                                                        tabIndex="-1"
+                                                        className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+                                                    >
+                                                        <li
+                                                            onClick={() =>
+                                                                handleTripExport(
+                                                                    "raw",
+                                                                    trip.identifier,
+                                                                    trip.trip_id,
+                                                                )
+                                                            }
+                                                        >
+                                                            <a>Data mentah</a>
+                                                        </li>
+                                                        <li
+                                                            onClick={() =>
+                                                                handleTripExport(
+                                                                    "stats",
+                                                                    trip.identifier,
+                                                                    trip.trip_id,
+                                                                )
+                                                            }
+                                                        >
+                                                            <a>Statistik</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))

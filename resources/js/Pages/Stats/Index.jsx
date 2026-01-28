@@ -45,10 +45,23 @@ export default function StatsIndex() {
             animations: { enabled: true },
             fontFamily: FONT_FAMILY,
         },
-        xaxis: { categories: avgCategories },
+        xaxis: {
+            categories: avgCategories,
+            title: {
+                text: "Jarak (Km)",
+            },
+        },
         stroke: { curve: "stepline" },
-        yaxis: { min: 0, max: 150, title: { text: "Km/jam" } },
-        title: { text: "Rata Rata Kecepatan Kendaraan (Km/Jam)" },
+        yaxis: {
+            min: 0,
+            max: 150,
+            tickAmount: 6,
+            labels: {
+                formatter: (val) => Math.round(val),
+            },
+            title: { text: "Kecepatan (Km/jam)" },
+        },
+        title: { text: "Rata Rata" },
     };
 
     const p85Options = {
@@ -57,10 +70,23 @@ export default function StatsIndex() {
             animations: { enabled: true },
             fontFamily: FONT_FAMILY,
         },
-        xaxis: { categories: p85Categories },
+        xaxis: {
+            categories: p85Categories,
+            title: {
+                text: "Jarak (Km)",
+            },
+        },
         stroke: { curve: "stepline" },
-        yaxis: { min: 0, max: 150, title: { text: "Km/jam" } },
-        title: { text: "Persentil 85 Kecepatan Kendaraan (Km/Jam)" },
+        yaxis: {
+            min: 0,
+            max: 150,
+            tickAmount: 6,
+            labels: {
+                formatter: (val) => Math.round(val),
+            },
+            title: { text: "Kecepatan (Km/jam)" },
+        },
+        title: { text: "Persentil 85" },
     };
 
     return (
@@ -68,21 +94,24 @@ export default function StatsIndex() {
             <Head title="Trip Stats" />
             <div className="card bg-base-100 shadow-sm w-full">
                 <div className="card-body">
-                    {/* Chart Avg */}
-                    <div className="w-5/6 mx-auto">
-                        <Chart
-                            options={avgOptions}
-                            series={avgSeries}
-                            type="line"
-                            height={400}
-                        />
-                    </div>
-
+                    <h2 className="font-bold text-lg text-center">
+                        Profil Kecepatan Kendaraan
+                    </h2>
                     {/* Chart P85 */}
                     <div className="w-5/6 mx-auto">
                         <Chart
                             options={p85Options}
                             series={p85Series}
+                            type="line"
+                            height={400}
+                        />
+                    </div>
+
+                    {/* Chart Avg */}
+                    <div className="w-5/6 mx-auto">
+                        <Chart
+                            options={avgOptions}
+                            series={avgSeries}
                             type="line"
                             height={400}
                         />

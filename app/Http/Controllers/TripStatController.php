@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\TripStatService;
+use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
 class TripStatController extends Controller
@@ -23,6 +24,13 @@ class TripStatController extends Controller
     public function fetchTripStatData()
     {
         $data = $this->tripStatService->getData();
+        
+        return response()->json($data);
+    }
+
+    public function fetchTripStatDataById($identifier, $tripId)
+    {
+        $data = $this->tripStatService->getDataById($identifier, $tripId);
         
         return response()->json($data);
     }

@@ -155,9 +155,12 @@ export default function TripMap({ devices }) {
 
     return (
         <AuthenticatedLayout>
-            <Head title="Peta Perangkat" />
+            <Head title="Tracking Realtime" />
             <div className="card bg-base-100 shadow-sm w-full">
                 <div className="card-body">
+                    <h2 className="font-bold text-lg text-center">
+                        Tracking Realtime
+                    </h2>
                     <div className="flex items-center justify-end mb-4">
                         <label className="label">
                             <input

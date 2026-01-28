@@ -77,7 +77,7 @@ export default function Sidebar({
         //     roles: ["admin", "operator"],
         // },
         {
-            label: "Trip Peta",
+            label: "Tracking Realtime",
             icon: <FaMap />,
             routeStr: "gps.tripMap",
             roles: ["admin", "operator"],

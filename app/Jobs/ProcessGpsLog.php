@@ -8,7 +8,6 @@ use App\Repositories\GpsLogRepository;
 use App\Services\GeoService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Log;
 
 class ProcessGpsLog implements ShouldQueue
 {

@@ -83,8 +83,8 @@ function createLegend(map, devices, iconMap) {
 export default function TripMapRealtime({
     trips = {}, // { device_id: [ {lat,lon,speed,recorded_at} ] }
     devices = [], // dari props halaman TripMap
-    defaultLat = -7.2898,
-    defaultLng = 112.7151,
+    defaultLat = -6.984172111030562,
+    defaultLng = 110.41259842198662,
     zoom = 13,
     tripStatus = true,
 }) {

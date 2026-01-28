@@ -11,7 +11,7 @@ export default function AuthenticatedLayout({ children }) {
         userFromUsePage?.roles?.map((role) => role.name) ?? [];
 
     const [open, setOpen] = useState(
-        () => JSON.parse(localStorage.getItem("sidebar-open")) ?? true
+        () => JSON.parse(localStorage.getItem("sidebar-open")) ?? true,
     );
 
     useEffect(() => {
@@ -106,7 +106,13 @@ export default function AuthenticatedLayout({ children }) {
                             className="btn btn-ghost text-xl"
                             href={route("dashboard")}
                         >
-                            SIMPROK
+                            <div className="text-left">
+                                <div className="text-base">SIMPROK</div>
+                                <div className="text-xs">
+                                    Sistem Informasi Monitoring Profil Kecepatan
+                                    Kendaraan
+                                </div>
+                            </div>
                         </Link>
                     </div>
                     <div className="dropdown dropdown-end mr-3">

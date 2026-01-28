@@ -19,12 +19,12 @@ class GpsLogSeeder extends Seeder
 
         foreach ($devices as $device) {
             $tripId = Str::uuid()->toString();
-            for ($i = 0; $i < 1000; $i++) {
+            for ($i = 0; $i < 100; $i++) {
                 GpsLog::create([
                     'trip_id'     => $tripId,
                     'device_id'   => $device->id,
-                    'latitude'    => -6.200000 + rand(-100, 100) / 10000,
-                    'longitude'   => 106.816666 + rand(-100, 100) / 10000,
+                    'latitude'    => -6.200000 + rand(-10, 10) / 10000,
+                    'longitude'   => 106.816666 + rand(-10, 10) / 10000,
                     'speed'       => rand(0, 100), // km/h
                     'recorded_at' => Carbon::now()->subMinutes(20 - $i),
                 ]);

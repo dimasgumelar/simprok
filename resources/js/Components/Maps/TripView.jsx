@@ -29,8 +29,8 @@ L.Icon.Default.mergeOptions({
 
 const TripView = ({
     trips = [],
-    defaultLat = -7.289846761027304,
-    defaultLng = 112.7151170415472,
+    defaultLat = -6.984172111030562,
+    defaultLng = 110.41259842198662,
     zoom = 13,
 }) => {
     const mapRef = useRef(null);
@@ -44,7 +44,7 @@ const TripView = ({
         const map = L.map("map").setView([defaultLat, defaultLng], zoom);
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-            map
+            map,
         );
 
         // ---- LEGEND CONTROL ----
@@ -85,7 +85,7 @@ const TripView = ({
                 d.latitude &&
                 d.longitude &&
                 !isNaN(parseFloat(d.latitude)) &&
-                !isNaN(parseFloat(d.longitude))
+                !isNaN(parseFloat(d.longitude)),
         );
 
         cleanTrips.forEach((d, i) => {
@@ -119,7 +119,7 @@ const TripView = ({
             marker.bindPopup(
                 `<b>Titik Awal</b><br/>Kecepatan: <b>${
                     first.speed ?? "N/A"
-                }</b> km/h<br>${parseDateTime(first.recorded_at)}`
+                }</b> km/h<br>${parseDateTime(first.recorded_at)}`,
             );
             markersRef.current.push(marker);
         }
@@ -133,7 +133,7 @@ const TripView = ({
             marker.bindPopup(
                 `<b>Titik Akhir</b><br/>Kecepatan: <b>${
                     last.speed ?? "N/A"
-                }</b> km/h<br>${parseDateTime(last.recorded_at)}`
+                }</b> km/h<br>${parseDateTime(last.recorded_at)}`,
             );
             markersRef.current.push(marker);
         }
