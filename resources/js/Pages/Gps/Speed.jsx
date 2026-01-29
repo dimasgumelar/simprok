@@ -150,7 +150,7 @@ export default function Speed({ devices }) {
     return (
         <AuthenticatedLayout>
             <Head title="Kecepatan" />
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <h2 className="font-bold text-lg text-center">
                         Kecepatan Realtime

@@ -61,7 +61,7 @@ export default function GpsLogsIndex({ gpsLogs }) {
     return (
         <AuthenticatedLayout>
             <Head title="Gps Log" />
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <Breadcrumbs list={breadcrumbs} />
                     <div className="flex items-center justify-end">

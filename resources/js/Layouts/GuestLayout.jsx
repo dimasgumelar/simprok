@@ -1,4 +1,6 @@
 import { Link } from "@inertiajs/react";
+import Lottie from "lottie-react";
+import RedCarDrive from "@/assets/lottie/red-car-drive.json";
 
 export default function GuestLayout({ children }) {
     return (
@@ -31,6 +33,7 @@ export default function GuestLayout({ children }) {
             <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md max-w-md rounded-lg dark:bg-gray-800">
                 {children}
             </div>
+            <Lottie animationData={RedCarDrive} loop className="w-96 mx-auto" />
         </div>
     );
 }

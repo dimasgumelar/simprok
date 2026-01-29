@@ -16,7 +16,7 @@ export default function UpdateProfileInformation({ className = "" }) {
     };
 
     return (
-        <div className="card bg-base-100 shadow-sm w-full">
+        <div className="card shadow-sm w-full">
             <div className="card-body pb-0">
                 <form onSubmit={submit} className="">
                     <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
@@ -55,16 +55,16 @@ export default function UpdateProfileInformation({ className = "" }) {
                                     processing
                                         ? "btn-disabled"
                                         : recentlySuccessful
-                                        ? "btn-success"
-                                        : "btn-primary"
+                                          ? "btn-success"
+                                          : "btn-primary"
                                 } mt-4`}
                                 disabled={processing}
                             >
                                 {processing
                                     ? "Menyimpan..."
                                     : recentlySuccessful
-                                    ? "Tersimpan"
-                                    : "Simpan"}
+                                      ? "Tersimpan"
+                                      : "Simpan"}
                             </button>
                         </div>
                     </fieldset>

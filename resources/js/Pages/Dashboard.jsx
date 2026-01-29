@@ -15,7 +15,7 @@ export default function Dashboard({}) {
             }
         >
             <Head title="Beranda" />
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <div className="flex flex-row items-center">
                         <div>Hai! {userFromUsePage.name}</div>

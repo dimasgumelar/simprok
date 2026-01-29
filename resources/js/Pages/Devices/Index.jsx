@@ -107,7 +107,7 @@ export default function DevicesIndex({ devices }) {
     return (
         <AuthenticatedLayout>
             <Head title="Devices" />
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <Breadcrumbs list={breadcrumbs} />
                     <div className="flex items-center justify-end">
@@ -175,19 +175,19 @@ export default function DevicesIndex({ devices }) {
                                                 <ViewButton
                                                     route={route(
                                                         "devices.view",
-                                                        device.id
+                                                        device.id,
                                                     )}
                                                 />
                                                 <EditButton
                                                     route={route(
                                                         "devices.edit",
-                                                        device.id
+                                                        device.id,
                                                     )}
                                                 />
                                                 <DeleteButton
                                                     onClick={() =>
                                                         openDeleteModal(
-                                                            device.id
+                                                            device.id,
                                                         )
                                                     }
                                                 />

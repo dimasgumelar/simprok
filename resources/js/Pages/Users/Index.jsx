@@ -110,7 +110,7 @@ export default function UsersIndex({ users, roles }) {
     return (
         <AuthenticatedLayout>
             <Head title="Users" />
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <Breadcrumbs list={breadcrumbs} />
                     <div className="flex items-center justify-end">
@@ -181,13 +181,13 @@ export default function UsersIndex({ users, roles }) {
                                                 <ViewButton
                                                     route={route(
                                                         "users.view",
-                                                        user.id
+                                                        user.id,
                                                     )}
                                                 />
                                                 <EditButton
                                                     route={route(
                                                         "users.edit",
-                                                        user.id
+                                                        user.id,
                                                     )}
                                                 />
                                                 <DeleteButton

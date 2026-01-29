@@ -139,7 +139,7 @@ export default function TripsView({ identifier, tripId }) {
     return (
         <AuthenticatedLayout>
             <Head title="Lihat Trip" />
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <Breadcrumbs list={breadcrumbs} />
                     <div className="overflow-x-auto">

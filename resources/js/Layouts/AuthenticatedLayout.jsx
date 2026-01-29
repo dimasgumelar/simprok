@@ -2,6 +2,8 @@ import { Link, router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import FlashToast from "@/Components/FlashToast";
 import Sidebar from "@/Components/Sidebar";
+import Lottie from "lottie-react";
+import RedCarDrive from "@/assets/lottie/red-car-drive.json";
 
 export default function AuthenticatedLayout({ children }) {
     const { props } = usePage();
@@ -150,7 +152,19 @@ export default function AuthenticatedLayout({ children }) {
                 </div>
 
                 {/* Main Content */}
-                <main className="flex-1 overflow-y-auto">{children}</main>
+                <main className="relative flex-1 overflow-y-auto">
+                    {/* Background Lottie */}
+                    <div className="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center">
+                        <Lottie
+                            animationData={RedCarDrive}
+                            loop
+                            className="w-[600px] max-w-full"
+                        />
+                    </div>
+
+                    {/* Foreground Content */}
+                    <div className="relative z-10 p-4">{children}</div>
+                </main>
             </div>
         </div>
     );

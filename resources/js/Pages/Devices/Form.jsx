@@ -66,7 +66,7 @@ export default function DevicesForm({ device = {}, types, isEdit = false }) {
         <AuthenticatedLayout>
             <Head title={`${isEdit ? "Ubah" : "Tambah"} Pengguna`} />
 
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <Breadcrumbs list={breadcrumbs} />
                     <form onSubmit={submit} className="space-y-4 mt-4">

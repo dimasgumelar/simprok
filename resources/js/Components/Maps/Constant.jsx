@@ -37,14 +37,3 @@ export const makeIcon = (icon, icon2x, iconLength = 25, iconHeight = 41) => {
         iconAnchor: [iconLength / 2, 41],
     });
 };
-
-// export const makeIconFa = (faIcon) => {
-//     const iconHtml = ReactDOMServer.renderToString(faIcon);
-
-//     return L.divIcon({
-//         html: iconHtml,
-//         className: "",
-//         iconSize: [32, 32],
-//         iconAnchor: [16, 32],
-//     });
-// };

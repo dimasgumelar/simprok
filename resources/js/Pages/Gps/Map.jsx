@@ -15,7 +15,7 @@ import SpeedometerCircle from "@/Components/Speedometer";
 
 export default function Map({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState(
-        devices.map((d) => d.identifier)
+        devices.map((d) => d.identifier),
     );
     const [devicePositions, setDevicePositions] = useState({});
 
@@ -57,7 +57,7 @@ export default function Map({ devices }) {
 
     function toggleDevice(id) {
         setSelectedDevices((prev) =>
-            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id],
         );
     }
 
@@ -72,7 +72,7 @@ export default function Map({ devices }) {
     return (
         <AuthenticatedLayout>
             <Head title="Peta Perangkat" />
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <div className="flex items-center justify-end mb-4">
                         <TableDropdown

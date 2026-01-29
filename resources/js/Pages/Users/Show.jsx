@@ -15,7 +15,7 @@ export default function UsersShow({ user = {} }) {
         <AuthenticatedLayout>
             <Head title="Users View" />
 
-            <div className="card bg-base-100 shadow-sm w-full">
+            <div className="card shadow-sm w-full">
                 <div className="card-body">
                     <Breadcrumbs list={breadcrumbs} />
                     <div className="overflow-x-auto">
