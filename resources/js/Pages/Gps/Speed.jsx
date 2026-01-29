@@ -118,7 +118,11 @@ export default function Speed({ devices }) {
     });
 
     const options = {
-        chart: { id: "speed-realtime", animations: { enabled: true } },
+        chart: {
+            id: "speed-realtime",
+            animations: { enabled: true },
+            fontFamily: FONT_FAMILY,
+        },
         xaxis: {
             title: {
                 text: "Waktu",
@@ -135,10 +139,6 @@ export default function Speed({ devices }) {
             title: { text: "Kecepatan (Km/jam)" },
         },
         title: { text: "Kecepatan Kendaraan" },
-        chart: {
-            id: "speed-realtime",
-            fontFamily: FONT_FAMILY,
-        },
     };
 
     function toggleDevice(id) {
