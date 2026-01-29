@@ -117,6 +117,17 @@ export default function Speed({ devices }) {
         };
     });
 
+    const categories = uniqueTimestamps.map((ts) =>
+        new Date(ts)
+            .toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false,
+            })
+            .replaceAll(".", ":"),
+    );
+
     const options = {
         chart: {
             id: "speed-realtime",
@@ -127,6 +138,7 @@ export default function Speed({ devices }) {
             title: {
                 text: "Waktu",
             },
+            categories: categories,
         },
         stroke: { curve: "smooth" },
         yaxis: {
