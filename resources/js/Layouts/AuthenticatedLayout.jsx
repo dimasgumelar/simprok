@@ -163,7 +163,7 @@ export default function AuthenticatedLayout({ children }) {
                     </div>
 
                     {/* Foreground Content */}
-                    <div className="relative z-10 p-4">{children}</div>
+                    <div className="relative z-5 p-4">{children}</div>
                 </main>
             </div>
         </div>
