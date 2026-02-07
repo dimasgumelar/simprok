@@ -28,6 +28,7 @@ class WebhookController extends Controller
             'speed'       => 'required|numeric|min:0',
             'recorded_at' => 'required|date',
             'trip_id'     => 'required|uuid',
+            'is_active'   => 'required|accepted',
         ]);
         
         $gpsLog = $this->gpsLogService->create($data);
