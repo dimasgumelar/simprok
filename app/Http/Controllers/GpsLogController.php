@@ -6,6 +6,7 @@ use App\Services\GpsLogService;
 use App\Services\ExportService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
 
 class GpsLogController extends Controller
 {
@@ -150,5 +151,15 @@ class GpsLogController extends Controller
         $trips = $this->gpsLogService->findByTripId($identifier, $tripId, 1000); // per page 1.000
 
         return response()->json($trips);
+    }
+
+    public function destroy($identifier, $tripId)
+    {
+        $tripDeleted = $this->gpsLogService->deleteByTripId($identifier, $tripId);
+        if (!$tripDeleted) {
+            return Redirect::back()->with('error', 'Gagal menghapus data trip.');
+        }
+
+        return Redirect::route('trips.index')->with('success', 'Berhasil menghapus data trip.');
     }
 }

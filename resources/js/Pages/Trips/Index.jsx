@@ -1,24 +1,66 @@
-import React, { useState } from "react";
-import { Head } from "@inertiajs/react";
+import React, { useRef, useState } from "react";
+import { Head, useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SortableHeader from "@/Components/SortableHeader";
 import Breadcrumbs from "@/Components/Breadcrumbs";
 import Pagination from "@/Components/Pagination";
 import TableNotFound from "@/Components/TableNotFound";
 import TableSearch from "@/Components/TableSearch";
+import DeleteModal from "@/Components/DeleteModal";
 import { parseDateTime } from "@/utils/helper-function";
-import { DownloadButton, ViewButton } from "@/Components/Button";
+import { DownloadButton, ViewButton, DeleteButton } from "@/Components/Button";
 import { inertiaGet } from "@/utils/helper-function";
 import { BreadcrumbsTrips } from "@/Pages/Trips/Constant";
 import { FaDownload } from "react-icons/fa";
+import Roles from "@/utils/UserFromUsePage";
 
 export default function TripsIndex({ trips }) {
+    const { userFromUsePage, role } = Roles();
+    console.log(userFromUsePage, role);
+
     const breadcrumbs = [<BreadcrumbsTrips />, "Daftar"];
+
+    const [deleteTripId, setDeleteTripId] = useState(null);
+    const [deleteIdentifierId, setDelIdentifierId] = useState(null);
+    const modalRef = useRef(null);
+    const { post, processing } = useForm();
 
     const [perPage, setPerPage] = useState(trips.per_page || 10);
     const [search, setSearch] = useState("");
     const [sortField, setSortField] = useState("");
     const [sortDirection, setSortDirection] = useState("");
+
+    // Delete
+    function openDeleteModal(id, identifier) {
+        setDeleteTripId(id);
+        setDelIdentifierId(identifier);
+        modalRef.current.showModal();
+    }
+
+    function closeDeleteModal() {
+        modalRef.current.close();
+        setDeleteTripId(null);
+        setDelIdentifierId(null);
+    }
+
+    function handleDelete() {
+        if (deleteTripId) {
+            post(
+                route("trips.destroy", {
+                    identifier: deleteIdentifierId,
+                    tripId: deleteTripId,
+                }),
+                {
+                    onSuccess: () => {
+                        closeDeleteModal();
+                    },
+                    onError: () => {
+                        alert("Gagal menghapus data pengguna.");
+                    },
+                },
+            );
+        }
+    }
 
     function applyFilters(overrides = {}) {
         inertiaGet("trips.index", {
@@ -135,7 +177,7 @@ export default function TripsIndex({ trips }) {
                                                     trip.recorded_at,
                                                 )}
                                             </td>
-                                            <td>
+                                            <td className="flex flex-wrap justify-center items-center gap-2">
                                                 <ViewButton
                                                     route={route("trips.view", {
                                                         identifier:
@@ -150,7 +192,7 @@ export default function TripsIndex({ trips }) {
                                                     <div
                                                         tabIndex={0}
                                                         role="button"
-                                                        className="btn btn-sm btn-secondary ml-2"
+                                                        className="btn btn-sm btn-secondary"
                                                     >
                                                         <FaDownload />
                                                         <span className="hidden sm:flex">
@@ -185,6 +227,16 @@ export default function TripsIndex({ trips }) {
                                                         </li>
                                                     </ul>
                                                 </div>
+                                                {role.hasAdmin && (
+                                                    <DeleteButton
+                                                        onClick={() =>
+                                                            openDeleteModal(
+                                                                trip.trip_id,
+                                                                trip.identifier,
+                                                            )
+                                                        }
+                                                    />
+                                                )}
                                             </td>
                                         </tr>
                                     ))
@@ -199,6 +251,13 @@ export default function TripsIndex({ trips }) {
                     </div>
                 </div>
             </div>
+            <DeleteModal
+                modalRef={modalRef}
+                onCancel={closeDeleteModal}
+                onConfirm={handleDelete}
+                title="trip"
+                isDeleting={processing}
+            />
         </AuthenticatedLayout>
     );
 }

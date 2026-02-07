@@ -63,7 +63,7 @@ class GpsLogRepository
     public function findBytripId($deviceId, $tripId, $perPage)
     {
         $query = GpsLog::where('device_id', '=', $deviceId)->where('trip_id', '=', $tripId)->orderBy('recorded_at', 'asc');
-        $data = $perPage ? $query->paginate($perPage) : $query->get();
+        $data = $perPage ? $query->paginate($perPage)->withQueryString()->onEachSide(0) : $query->get();
         return $data;
     }
 
@@ -87,5 +87,12 @@ class GpsLogRepository
     public function delete($device)
     {
         return $device->delete();
+    }
+
+    public function deleteByTripId($deviceId, $tripId)
+    {
+        return GpsLog::where('device_id', $deviceId)
+            ->where('trip_id', $tripId)
+            ->delete();
     }
 }

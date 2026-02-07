@@ -6,14 +6,8 @@ export default function Roles() {
 
     const role = {
         hasAdmin: userFromUsePage.roles.some((role) => role.name === "admin"),
-        hasKetuaTim: userFromUsePage.roles.some(
-            (role) => role.name === "ketua tim"
-        ),
-        hasTeknisi: userFromUsePage.roles.some(
-            (role) => role.name === "teknisi"
-        ),
         hasOperator: userFromUsePage.roles.some(
-            (role) => role.name === "operator"
+            (role) => role.name === "operator",
         ),
     };
 

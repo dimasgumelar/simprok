@@ -213,7 +213,7 @@ export default function UsersIndex({ users, roles }) {
                 modalRef={modalRef}
                 onCancel={closeDeleteModal}
                 onConfirm={handleDelete}
-                title="user"
+                title="pengguna"
                 isDeleting={processing}
             />
         </AuthenticatedLayout>

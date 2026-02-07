@@ -69,6 +69,19 @@ class GpsLogService
     {
         return $this->gpsLogRepo->delete($gpsLog);
     }
+
+    public function deleteByTripId($identifier, $tripId)
+    {
+        $device = $this->deviceRepo->findByIdentifier($identifier);
+        if (!$device) {
+            return $device;
+        }
+
+        $this->gpsLogRepo->deleteByTripId($device->id, $tripId);
+        $this->tripStatRepo->deleteByTripId($device->id, $tripId);
+
+        return true;
+    }
     
     public function tripExportById($type, $identifier, $tripId)
     {

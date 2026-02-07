@@ -128,7 +128,7 @@ export default function GpsLogsIndex({ gpsLogs }) {
                                 {gpsLogs.data.length === 0 ? (
                                     <TableNotFound
                                         message="Tidak ada data yang ditemukan."
-                                        colspan={5}
+                                        colspan={7}
                                     />
                                 ) : (
                                     gpsLogs.data.map((gpsLog, index) => (

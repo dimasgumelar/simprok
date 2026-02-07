@@ -39,4 +39,11 @@ class TripStatRepository
 
         return $isFull ? $query->get() : $query->get(['km', 'avg_speed', 'p85_speed']);
     }
+
+    public function deleteByTripId($deviceId, $tripId)
+    {
+        return TripStat::where('device_id', $deviceId)
+            ->where('trip_id', $tripId)
+            ->delete();
+    }
 }

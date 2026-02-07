@@ -56,6 +56,7 @@ Route::middleware(['auth', 'role:admin|operator'])->group(function () {
     Route::get('/api/trip/{identifier}/{tripId}', [GpsLogController::class, 'fetchTripData']);
     Route::get('/api/trip/statistics/{identifier}/{tripId}', [TripStatController::class, 'fetchTripStatDataById']);
     Route::get('/trip/export/{type}/{identifier}/{tripId}', [GpsLogController::class, 'tripExportById'])->name('trip.export');
+    Route::post('/trip/{identifier}/{tripId}/delete', [GpsLogController::class, 'destroy'])->name('trips.destroy');
     
     Route::get('/speed', [GpsController::class, 'speed'])->name('gps.speed');
     // Route::get('/map', [GpsController::class, 'map'])->name('gps.map');
