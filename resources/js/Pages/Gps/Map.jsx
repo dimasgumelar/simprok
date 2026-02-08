@@ -12,6 +12,7 @@ import {
     MQTT_CLIENT_ID,
 } from "@/utils/constants";
 import SpeedometerCircle from "@/Components/Speedometer";
+import { FaSatelliteDish } from "react-icons/fa";
 
 export default function Map({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState(
@@ -76,6 +77,7 @@ export default function Map({ devices }) {
                 <div className="card-body">
                     <div className="flex items-center justify-end mb-4">
                         <TableDropdown
+                            icon={<FaSatelliteDish />}
                             title="Pilih Perangkat"
                             list={devices}
                             selectedList={selectedDevices}

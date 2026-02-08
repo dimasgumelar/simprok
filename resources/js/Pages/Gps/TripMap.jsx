@@ -12,6 +12,7 @@ import {
 } from "@/utils/constants";
 import SpeedometerCircle from "@/Components/Speedometer";
 import TripMapRealtime from "@/Components/Maps/TripMapRealtime";
+import { FaSatelliteDish } from "react-icons/fa";
 
 export default function TripMap({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState(
@@ -172,6 +173,7 @@ export default function TripMap({ devices }) {
                             Trip
                         </label>
                         <TableDropdown
+                            icon={<FaSatelliteDish />}
                             title="Pilih Perangkat"
                             list={devices}
                             selectedList={selectedDevices}

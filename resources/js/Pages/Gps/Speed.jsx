@@ -13,6 +13,7 @@ import {
     FONT_FAMILY,
 } from "@/utils/constants";
 import SpeedometerCircle from "@/Components/Speedometer";
+import { FaSatelliteDish } from "react-icons/fa";
 
 export default function Speed({ devices }) {
     const [selectedDevices, setSelectedDevices] = useState(
@@ -169,6 +170,7 @@ export default function Speed({ devices }) {
                     </h2>
                     <div className="flex justify-end mb-4">
                         <TableDropdown
+                            icon={<FaSatelliteDish />}
                             title="Pilih Perangkat"
                             list={devices}
                             selectedList={selectedDevices}
