@@ -4,6 +4,7 @@ import FlashToast from "@/Components/FlashToast";
 import Sidebar from "@/Components/Sidebar";
 import Lottie from "lottie-react";
 import RedCarDrive from "@/assets/lottie/red-car-drive.json";
+import { publicAsset } from "@/utils/constants";
 
 export default function AuthenticatedLayout({ children }) {
     const { props } = usePage();
@@ -125,8 +126,7 @@ export default function AuthenticatedLayout({ children }) {
                         >
                             <div className="w-10 rounded-full">
                                 <img
-                                    alt="Tailwind CSS Navbar component"
-                                    src="assets/images/pktj.png"
+                                    src={publicAsset("assets/images/pktj.png")}
                                 />
                             </div>
                         </div>

@@ -1,0 +1,1 @@
+import{j as e}from"./app-D9pHj6uQ.js";import{B as n}from"./constants-BNYy6JAm.js";function i({roles:t=[]}){return e.jsx(e.Fragment,{children:t.map(a=>e.jsx("span",{className:`badge badge-outline truncate block ${n[a.id-1%n.length]}`,children:a.name},a.id))})}export{i as B};

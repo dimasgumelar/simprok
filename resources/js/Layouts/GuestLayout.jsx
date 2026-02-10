@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import Lottie from "lottie-react";
 import RedCarDrive from "@/assets/lottie/red-car-drive.json";
+import { publicAsset } from "@/utils/constants";
 
 export default function GuestLayout({ children }) {
     return (
@@ -8,17 +9,17 @@ export default function GuestLayout({ children }) {
             <div>
                 <div className="flex items-center justify-center gap-10 mb-5">
                     <img
-                        src="assets/images/kemenhub.png"
+                        src={publicAsset("assets/images/kemenhub.png")}
                         alt="Kemenhub"
                         className="h-20 object-contain"
                     />
                     <img
-                        src="assets/images/pktj.png"
+                        src={publicAsset("assets/images/pktj.png")}
                         alt="PKTJ"
                         className="h-20 object-contain"
                     />
                     <img
-                        src="assets/images/bpsdm.png"
+                        src={publicAsset("assets/images/bpsdm.png")}
                         alt="BPSDM"
                         className="h-20 object-contain"
                     />

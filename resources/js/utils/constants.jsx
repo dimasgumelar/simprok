@@ -66,3 +66,5 @@ export const COLOR_WARNING = "var(--color-warning)";
 export const COLOR_INFO = "var(--color-info)";
 export const COLOR_ERROR = "var(--color-error)";
 export const COLOR_NEUTRAL = "var(--color-neutral)";
+
+export const publicAsset = (path) => `/${path}`;
