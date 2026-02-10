@@ -1,0 +1,1 @@
+import{q as n}from"./app-B3_1g-8V.js";function m(){const{props:r}=n(),o=r.user,s={hasAdmin:o.roles.some(e=>e.name==="admin"),hasOperator:o.roles.some(e=>e.name==="operator")};return{userFromUsePage:o,role:s}}export{m as R};
