@@ -57,7 +57,6 @@ export default function StatsIndex() {
             }
 
             const data = await response.json();
-            console.log(data);
 
             setFilter(data.filter);
 
