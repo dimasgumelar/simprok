@@ -18,16 +18,18 @@ class GpsLogSeeder extends Seeder
         $devices = Device::all();
 
         foreach ($devices as $device) {
-            $tripId = Str::uuid()->toString();
-            for ($i = 0; $i < 100; $i++) {
-                GpsLog::create([
-                    'trip_id'     => $tripId,
-                    'device_id'   => $device->id,
-                    'latitude'    => -6.200000 + rand(-10, 10) / 10000,
-                    'longitude'   => 106.816666 + rand(-10, 10) / 10000,
-                    'speed'       => rand(0, 100), // km/h
-                    'recorded_at' => Carbon::now()->subMinutes(20 - $i),
-                ]);
+            for ($j=0; $j <8 ; $j++) { 
+                $tripId = Str::uuid()->toString();
+                for ($i = 0; $i < 100; $i++) {
+                    GpsLog::create([
+                        'trip_id'     => $tripId,
+                        'device_id'   => $device->id,
+                        'latitude'    => -6.200000 + rand(-10, 10) / 10000,
+                        'longitude'   => 106.816666 + rand(-10, 10) / 10000,
+                        'speed'       => rand(0, 100), // km/h
+                        'recorded_at' => Carbon::now()->subMinutes(20 - $i),
+                    ]);
+                }
             }
         }
     }

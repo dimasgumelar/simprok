@@ -16,31 +16,89 @@ class TripStatService
         $this->deviceRepo = $deviceRepo;
     }
     
-    public function getData()
+    public function getData($tripIds = [], $deviceIds = [], $isOptimal = false)
     {
         $avgChartData = [];
-        $bestAvgTrips = $this->tripStatRepo->bestAvgTrips();
-        foreach ($bestAvgTrips as $deviceId => $trip) {
-            $stats = $this->tripStatRepo->findByTripId($trip->trip_id, $deviceId);
-            $avgChartData[] = [
-                'name' => $trip->device->name ?? "Device {$deviceId}",
-                'trip_id' => $trip->trip_id,
-                'data' => $stats->pluck('avg_speed')->values()->toArray(),
-            ];
-        }
-
         $p85ChartData = [];
-        $bestP85Trips = $this->tripStatRepo->bestP85Trips();
-        foreach ($bestP85Trips as $deviceId => $trip) {
-            $stats = $this->tripStatRepo->findByTripId($trip->trip_id, $deviceId);
-            $p85ChartData[] = [
-                'name' => $trip->device->name ?? "Device {$deviceId}",
-                'trip_id' => $trip->trip_id,
-                'data' => $stats->pluck('p85_speed')->values()->toArray(),
+        $tripGrouppedById = $this->tripStatRepo->getTripGrouppedById();
+        $tripGroupped = $tripGrouppedById->map(function ($item) {
+            return [
+                'device_id' => $item->device_id,
+                'name' => $item->device->name ?? "Device {$item->device_id}",
+                'trip_ids' => explode(',', $item->trip_ids),
             ];
+        });
+
+        $deviceNameMap = $tripGroupped->pluck('name', 'device_id');
+
+        if ($isOptimal) {
+            $bestAvgTrips = $this->tripStatRepo->bestAvgTrips();
+            $tripIds = [];
+            $deviceIds = [];
+            foreach ($bestAvgTrips as $trip) {
+                $tripIds[] = $trip->trip_id;
+                $deviceIds[] = $trip->device_id;
+            }
+
+            $allStats = $this->tripStatRepo->findByDeviceTripPairs($tripIds, $deviceIds);
+            $grouped = $allStats->groupBy(function ($item) {
+                return $item->device_id.'|'.$item->trip_id;
+            });
+
+            foreach ($grouped as $key => $rows) {
+                [$deviceId, $tripId] = explode('|', $key);
+                $avgChartData[] = [
+                    'name' => $deviceNameMap[$deviceId] . " [".$tripId."]",
+                    'trip_id' => $tripId,
+                    'data' => $rows->pluck('avg_speed')->values()->toArray(),
+                ];
+            }
+            
+            $tripIds = [];
+            $deviceIds = [];
+            $bestP85Trips = $this->tripStatRepo->bestP85Trips();
+            foreach ($bestP85Trips as $trip) {
+                $tripIds[] = $trip->trip_id;
+                $deviceIds[] = $trip->device_id;
+            }
+            $allStats = $this->tripStatRepo->findByDeviceTripPairs($tripIds, $deviceIds);
+            $grouped = $allStats->groupBy(function ($item) {
+                return $item->device_id.'|'.$item->trip_id;
+            });
+    
+            foreach ($grouped as $key => $rows) {
+                [$deviceId, $tripId] = explode('|', $key);
+                $p85ChartData[] = [
+                    'name' => $deviceNameMap[$deviceId] . " [".$tripId."]",
+                    'trip_id' => $tripId,
+                    'data' => $rows->pluck('p85_speed')->values()->toArray(),
+                ];
+            }
+        } elseif (count($tripIds) > 0) {
+            $allStats = $this->tripStatRepo->findByDeviceTripPairs($tripIds, $deviceIds);
+            $grouped = $allStats->groupBy(function ($item) {
+                return $item->device_id.'|'.$item->trip_id;
+            });
+    
+            foreach ($grouped as $key => $rows) {
+                [$deviceId, $tripId] = explode('|', $key);
+    
+                $avgChartData[] = [
+                    'name' => $deviceNameMap[$deviceId] . " [".$tripId."]",
+                    'trip_id' => $tripId,
+                    'data' => $rows->pluck('avg_speed')->values()->toArray(),
+                ];
+    
+                $p85ChartData[] = [
+                    'name' => $deviceNameMap[$deviceId] . " [".$tripId."]",
+                    'trip_id' => $tripId,
+                    'data' => $rows->pluck('p85_speed')->values()->toArray(),
+                ];
+            }
         }
 
         $data = [
+            "filter" => $tripGroupped,
             "avg" => $avgChartData,
             "p85" => $p85ChartData,
         ];

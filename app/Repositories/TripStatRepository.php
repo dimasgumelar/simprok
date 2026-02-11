@@ -46,4 +46,26 @@ class TripStatRepository
             ->where('trip_id', $tripId)
             ->delete();
     }
+
+    public function getTripGrouppedById()
+    {
+        return TripStat::selectRaw('device_id, GROUP_CONCAT(DISTINCT trip_id ORDER BY created_at ASC) as trip_ids')
+            ->groupBy('device_id')
+            ->get();
+    }
+
+    public function findByDeviceTripPairs(array $tripIds, array $deviceIds)
+    {
+        return TripStat::with('device')
+            ->where(function ($q) use ($tripIds, $deviceIds) {
+                foreach ($tripIds as $i => $tripId) {
+                    $q->orWhere(function ($sub) use ($tripId, $deviceIds, $i) {
+                        $sub->where('trip_id', $tripId)
+                            ->where('device_id', $deviceIds[$i]);
+                    });
+                }
+            })
+            ->orderBy('id')
+            ->get();
+    }
 }

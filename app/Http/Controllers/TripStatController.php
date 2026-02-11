@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\GpsLogService;
 use App\Services\TripStatService;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TripStatController extends Controller
@@ -17,13 +18,22 @@ class TripStatController extends Controller
     
     public function index()
     {
-        return Inertia::render('Stats/Index', [
-        ]);
+        return Inertia::render('Stats/Index');
     }
 
-    public function fetchTripStatData()
+    public function fetchTripStatData(Request $request)
     {
-        $data = $this->tripStatService->getData();
+        $tripIds = $request->input('trip_id', []); 
+        $deviceIds = $request->input('device_id', []); 
+        $isOptimal = $request->boolean('is_optimal'); 
+
+        if (count($tripIds) !== count($deviceIds)) {
+            return response()->json([
+                'message' => 'Jumlah trip_id dan device_id tidak sama'
+            ], 422);
+        }
+
+        $data = $this->tripStatService->getData($tripIds, $deviceIds, $isOptimal);
         
         return response()->json($data);
     }

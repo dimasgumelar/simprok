@@ -49,3 +49,17 @@ export function DownloadButton({ onClick }) {
         </button>
     );
 }
+
+export function CustomButton({
+    onClick,
+    label = "Tombol",
+    icon,
+    className = "btn-primary",
+}) {
+    return (
+        <button type="button" onClick={onClick} className={`btn ${className}`}>
+            {icon}
+            <span className="hidden sm:flex">{label}</span>
+        </button>
+    );
+}

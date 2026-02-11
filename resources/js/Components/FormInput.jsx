@@ -44,7 +44,7 @@ export const InputFile = forwardRef(function InputFile(
         error,
         disabled = false,
     },
-    ref
+    ref,
 ) {
     return (
         <div>
@@ -120,7 +120,7 @@ export function InputDropdownManual({
     const dropdownRef = useRef(null);
 
     const filteredList = list.filter((item) =>
-        item[labelKey].toLowerCase().includes(search.toLowerCase())
+        item[labelKey].toLowerCase().includes(search.toLowerCase()),
     );
 
     const selectedLabel =
@@ -155,7 +155,7 @@ export function InputDropdownManual({
                 }`}
                 onClick={() => setIsOpen((prev) => !prev)}
             >
-                <span>{selectedLabel}</span>
+                <span className="flex-1 truncate">{selectedLabel}</span>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className={`w-4 h-4 transition-transform ${
@@ -203,6 +203,117 @@ export function InputDropdownManual({
                                     }}
                                 >
                                     {item[labelKey]}
+                                </li>
+                            ))
+                        ) : (
+                            <li className="px-3 py-2 text-sm">
+                                Tidak ada data yang ditemukan
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            )}
+
+            {error && <div className="text-error text-sm mt-1">{error}</div>}
+        </div>
+    );
+}
+
+export function InputDropdownManualList({
+    isRequired = false,
+    label,
+    value,
+    onChange,
+    error,
+    disabled = false,
+    list = [],
+    labelUnselected = "Pilih...",
+}) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const dropdownRef = useRef(null);
+
+    const filteredList = list.filter((item) =>
+        item.toLowerCase().includes(search.toLowerCase()),
+    );
+
+    const selectedLabel =
+        list.find((item) => item === value) || labelUnselected;
+
+    // Tutup dropdown saat klik di luar
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <label className="label block mb-2">
+                {label}
+                {isRequired && <span className="text-red-500"> *</span>}
+            </label>
+
+            <div
+                className={`input input-bordered w-full flex justify-between items-center cursor-pointer ${
+                    disabled ? "opacity-50 pointer-events-none" : ""
+                }`}
+                onClick={() => setIsOpen((prev) => !prev)}
+            >
+                <span className="flex-1 truncate">{selectedLabel}</span>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`w-4 h-4 transition-transform ${
+                        isOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                    />
+                </svg>
+            </div>
+
+            {isOpen && (
+                <div className="absolute z-10 mt-1 w-full bg-base-200 max-h-60 overflow-auto">
+                    <input
+                        type="text"
+                        placeholder="Cari..."
+                        className="input input-sm input-bordered w-full rounded-none"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        autoFocus
+                    />
+                    <ul>
+                        {filteredList.length > 0 ? (
+                            filteredList.map((item) => (
+                                <li
+                                    key={item}
+                                    className={`px-3 py-2 cursor-pointer hover:bg-primary ${
+                                        value === item ? "bg-primary" : ""
+                                    }`}
+                                    onClick={() => {
+                                        onChange({
+                                            target: { value: item },
+                                        });
+                                        setIsOpen(false);
+                                        setSearch("");
+                                    }}
+                                >
+                                    {item}
                                 </li>
                             ))
                         ) : (
@@ -316,8 +427,8 @@ export function InputImage({
                         previewUrl
                             ? previewUrl
                             : initValue
-                            ? `/storage/${initValue}`
-                            : DEFAULT_IMAGE
+                              ? `/storage/${initValue}`
+                              : DEFAULT_IMAGE
                     }
                     alt="Photo Preview"
                     className="w-full h-full object-contain"
