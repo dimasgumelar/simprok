@@ -84,7 +84,7 @@ class GpsLogController extends Controller
 
         // Ambil input sorting
         $sortField = $request->input('sort', 'recorded_at');
-        $sortDirection = $request->input('direction', 'asc');
+        $sortDirection = $request->input('direction', 'desc');
 
         $trips = $this->gpsLogService->getAllTrip($search, $perPage, $sortField, $sortDirection);
 
