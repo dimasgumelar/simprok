@@ -25,10 +25,15 @@ export default function GuestLayout({ children }) {
                     />
                 </div>
                 <Link href="/" className="flex flex-col flex-wrap items-center">
-                    <div className="text-4xl">SIMPROK</div>
+                    {/* <div className="text-4xl">SIMPROK</div>
                     <div className="text-1xl">
                         Sistem Informasi Monitoring Profil Kecepatan Kendaraan
-                    </div>
+                    </div> */}
+                    <img
+                        src={publicAsset("assets/images/logo-velo-track.png")}
+                        alt="VeloTrack"
+                        className="h-32 object-contain"
+                    />
                 </Link>
             </div>
             <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md max-w-md rounded-lg dark:bg-gray-800">
