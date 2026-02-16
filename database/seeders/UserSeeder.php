@@ -6,9 +6,6 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Permission;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Collection;
 
 class UserSeeder extends Seeder
 {
