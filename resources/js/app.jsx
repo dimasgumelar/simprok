@@ -6,8 +6,8 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import "leaflet/dist/leaflet.css";
 
-// document.documentElement.setAttribute("data-theme", "light");
-// document.documentElement.classList.remove("dark");
+document.documentElement.setAttribute("data-theme", "light");
+document.documentElement.classList.remove("dark");
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
