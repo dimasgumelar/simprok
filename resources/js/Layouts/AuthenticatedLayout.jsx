@@ -109,13 +109,19 @@ export default function AuthenticatedLayout({ children }) {
                             className="btn btn-ghost text-xl"
                             href={route("dashboard")}
                         >
-                            <img
-                                src={publicAsset(
-                                    "assets/images/logo-velo-track.png",
-                                )}
-                                alt="VeloTrack"
-                                className="h-10 object-contain"
-                            />
+                            <div className="flex flex-col items-start">
+                                <img
+                                    src={publicAsset(
+                                        "assets/images/logo-velo-track.png",
+                                    )}
+                                    alt="VeloTrack"
+                                    className="h-6 object-contain"
+                                />
+                                <div className="text-xs">
+                                    Sistem Informasi Monitoring Profil Kecepatan
+                                    Kendaraan
+                                </div>
+                            </div>
                             {/* <div className="text-left">
                                 <div className="text-base">SIMPROK</div>
                                 <div className="text-xs">

@@ -178,15 +178,22 @@ export default function StatsIndex() {
                                 />
                             </div>
                         ))}
-                        <label className="label h-[40px]">
-                            <input
-                                type="checkbox"
-                                className="toggle"
-                                checked={isOptimal}
-                                onChange={toggleOptimal}
-                            />
-                            Optimal
-                        </label>
+                        {filter.length > 0 && (
+                            <label className="label h-[40px]">
+                                <input
+                                    type="checkbox"
+                                    className="toggle"
+                                    checked={isOptimal}
+                                    onChange={toggleOptimal}
+                                />
+                                Optimal
+                            </label>
+                        )}
+                        {filter.length == 0 && (
+                            <div>
+                                Tidak ada data trip yang berjalan/ditemukan
+                            </div>
+                        )}
                     </div>
                     {/* Chart P85 */}
                     <div className="w-5/6 mx-auto">

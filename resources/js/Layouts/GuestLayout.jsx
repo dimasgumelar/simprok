@@ -34,6 +34,9 @@ export default function GuestLayout({ children }) {
                         alt="VeloTrack"
                         className="h-32 object-contain"
                     />
+                    <div className="text-1xl">
+                        Sistem Informasi Monitoring Profil Kecepatan Kendaraan
+                    </div>
                 </Link>
             </div>
             <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md max-w-md rounded-lg dark:bg-gray-800">
