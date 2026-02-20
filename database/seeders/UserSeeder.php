@@ -19,9 +19,9 @@ class UserSeeder extends Seeder
 
         // Buat user
         $user = User::create([
-            'name' => 'Admin SIMPROK',
+            'name' => 'Admin VeloTrack',
             'phone' => '6289514800903',
-            'email' => 'admin@simprok.com',
+            'email' => 'admin@velotrack.com',
             'password' => Hash::make('password'),
         ]);
 
@@ -31,9 +31,9 @@ class UserSeeder extends Seeder
         // Buat user operator
         for ($i = 1; $i <= 5; $i++) {
             $user = User::create([
-                'name' => 'Operator SIMPROK ' . $i,
+                'name' => 'Operator VeloTrack ' . $i,
                 'phone' => '6289514800903',
-                'email' => 'operator' . $i . '@simprok.com',
+                'email' => 'operator' . $i . '@velotrack.com',
                 'password' => Hash::make('password'),
             ]);
             // Assign role ke user
