@@ -16,7 +16,6 @@ import Roles from "@/utils/UserFromUsePage";
 
 export default function TripsIndex({ trips }) {
     const { userFromUsePage, role } = Roles();
-    console.log(userFromUsePage, role);
 
     const breadcrumbs = [<BreadcrumbsTrips />, "Daftar"];
 
