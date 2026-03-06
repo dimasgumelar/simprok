@@ -5,9 +5,22 @@ use App\Models\TripStat;
 
 class TripStatRepository
 {
-    public function bestAvgTrips()
+    public function bestAvgTrips($tripIds = [], $deviceIds = [])
     {
-        $bestAvgTrips = TripStat::selectRaw('device_id, trip_id, MAX(avg_speed) as peak_avg')
+        $query = TripStat::selectRaw('device_id, trip_id, MAX(avg_speed) as peak_avg');
+
+        if (!empty($tripIds) && !empty($deviceIds)) {
+            $query->where(function ($q) use ($tripIds, $deviceIds) {
+                foreach ($deviceIds as $i => $deviceId) {
+                    $q->orWhere(function ($sub) use ($deviceId, $tripIds, $i) {
+                        $sub->where('device_id', $deviceId)
+                            ->where('trip_id', $tripIds[$i]);
+                    });
+                }
+            });
+        }
+
+        $bestAvgTrips = $query
             ->groupBy('device_id', 'trip_id')
             ->get()
             ->groupBy('device_id')
@@ -18,9 +31,22 @@ class TripStatRepository
         return $bestAvgTrips;
     }
 
-    public function bestP85Trips()
+    public function bestP85Trips($tripIds = [], $deviceIds = [])
     {
-        $bestP85Trips = TripStat::selectRaw('device_id, trip_id, MAX(p85_speed) as peak_p85')
+        $query = TripStat::selectRaw('device_id, trip_id, MAX(p85_speed) as peak_p85');
+
+        if (!empty($tripIds) && !empty($deviceIds)) {
+            $query->where(function ($q) use ($tripIds, $deviceIds) {
+                foreach ($deviceIds as $i => $deviceId) {
+                    $q->orWhere(function ($sub) use ($deviceId, $tripIds, $i) {
+                        $sub->where('device_id', $deviceId)
+                            ->where('trip_id', $tripIds[$i]);
+                    });
+                }
+            });
+        }
+
+        $bestP85Trips = $query
             ->groupBy('device_id', 'trip_id')
             ->get()
             ->groupBy('device_id')

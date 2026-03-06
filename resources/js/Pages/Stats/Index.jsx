@@ -3,7 +3,7 @@ import { Head } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Chart from "react-apexcharts";
 import { FONT_FAMILY } from "@/utils/constants";
-import { InputDropdownManualList } from "@/Components/FormInput";
+import { InputDropdownManualListMultiple } from "@/Components/FormInput";
 
 export default function StatsIndex() {
     const [filter, setFilter] = useState([]);
@@ -33,9 +33,11 @@ export default function StatsIndex() {
             if (!isOptimal && Object.keys(selectedTrips).length === 0) return;
             const params = new URLSearchParams();
 
-            Object.entries(selectedTrips).forEach(([deviceId, tripId]) => {
-                params.append("device_id[]", deviceId);
-                params.append("trip_id[]", tripId);
+            Object.entries(selectedTrips).forEach(([deviceId, tripIds]) => {
+                tripIds.forEach((tripId) => {
+                    params.append("device_id[]", deviceId);
+                    params.append("trip_id[]", tripId);
+                });
             });
 
             params.append("is_optimal", isOptimal ? 1 : 0);
@@ -90,17 +92,21 @@ export default function StatsIndex() {
     }, [selectedTrips, isOptimal]);
 
     const handleTripChange = (deviceKey, value) => {
-        setSelectedTrips((prev) => ({
-            ...prev,
-            [deviceKey]: value,
-        }));
+        setSelectedTrips((prev) => {
+            const updated = { ...prev };
 
-        setIsOptimal(false);
+            if (!value || value.length === 0) {
+                delete updated[deviceKey];
+            } else {
+                updated[deviceKey] = value;
+            }
+
+            return updated;
+        });
     };
 
     const toggleOptimal = () => {
         setIsOptimal((prev) => !prev);
-        setSelectedTrips({});
     };
 
     const avgOptions = {
@@ -164,10 +170,9 @@ export default function StatsIndex() {
                     <div className="flex flex-wrap justify-center items-end gap-2">
                         {filter.map((item, index) => (
                             <div className="w-1/6" key={index}>
-                                <InputDropdownManualList
-                                    disabled={isOptimal}
+                                <InputDropdownManualListMultiple
                                     label={`Trip ${item.name}`}
-                                    value={selectedTrips[item.device_id] || ""}
+                                    value={selectedTrips[item.device_id] || []}
                                     onChange={(val) =>
                                         handleTripChange(
                                             item.device_id,

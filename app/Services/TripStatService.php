@@ -18,6 +18,9 @@ class TripStatService
     
     public function getData($tripIds = [], $deviceIds = [], $isOptimal = false)
     {
+        $tripIdsReq = $tripIds;
+        $deviceIdsReq = $deviceIds;
+
         $avgChartData = [];
         $p85ChartData = [];
         $tripGrouppedById = $this->tripStatRepo->getTripGrouppedById();
@@ -32,7 +35,7 @@ class TripStatService
         $deviceNameMap = $tripGroupped->pluck('name', 'device_id');
 
         if ($isOptimal) {
-            $bestAvgTrips = $this->tripStatRepo->bestAvgTrips();
+            $bestAvgTrips = $this->tripStatRepo->bestAvgTrips($tripIdsReq, $deviceIdsReq);
             $tripIds = [];
             $deviceIds = [];
             foreach ($bestAvgTrips as $trip) {
@@ -56,7 +59,7 @@ class TripStatService
             
             $tripIds = [];
             $deviceIds = [];
-            $bestP85Trips = $this->tripStatRepo->bestP85Trips();
+            $bestP85Trips = $this->tripStatRepo->bestP85Trips($tripIdsReq, $deviceIdsReq);
             foreach ($bestP85Trips as $trip) {
                 $tripIds[] = $trip->trip_id;
                 $deviceIds[] = $trip->device_id;
