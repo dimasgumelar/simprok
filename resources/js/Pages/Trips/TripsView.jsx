@@ -26,6 +26,8 @@ export default function TripsView({ identifier, tripId }) {
 
             const data = res.data;
 
+            console.log(data);
+
             const maxAvgLength = Math.max(
                 ...data.avg.map((item) => item.data.length),
             );
@@ -35,15 +37,20 @@ export default function TripsView({ identifier, tripId }) {
 
             setAvgSeries(data.avg);
             setP85Series(data.p85);
-            setAvgCategories(
-                Array.from({ length: maxAvgLength }, (_, i) => i + 1),
-            );
-            setP85Categories(
-                Array.from({ length: maxP85Length }, (_, i) => i + 1),
-            );
+            setAvgCategories(Array.from({ length: maxAvgLength }, (_, i) => i));
+            setP85Categories(Array.from({ length: maxP85Length }, (_, i) => i));
         } catch (error) {
             console.error("Error fetching trip stats:", error);
         }
+    };
+
+    const roundUpTo10 = (value) => Math.ceil(value / 10) * 10;
+
+    const getMaxValue = (series) => {
+        if (!series || series.length === 0) return 0;
+
+        const allValues = series.flatMap((item) => item.data || []);
+        return Math.max(...allValues);
     };
 
     useEffect(() => {
@@ -76,6 +83,16 @@ export default function TripsView({ identifier, tripId }) {
         fetchTripStats();
     }, [identifier, tripId]);
 
+    const avgMax = useMemo(() => {
+        const max = getMaxValue(avgSeries);
+        return roundUpTo10(max);
+    }, [avgSeries]);
+
+    const p85Max = useMemo(() => {
+        const max = getMaxValue(p85Series);
+        return roundUpTo10(max);
+    }, [p85Series]);
+
     const startDate = useMemo(
         () => (trips.length > 0 ? trips[0].recorded_at : null),
         [trips],
@@ -101,8 +118,8 @@ export default function TripsView({ identifier, tripId }) {
         stroke: { curve: "stepline" },
         yaxis: {
             min: 0,
-            max: 150,
-            tickAmount: 6,
+            max: avgMax,
+            tickAmount: avgMax / 10,
             labels: {
                 formatter: (val) => Math.round(val),
             },
@@ -126,8 +143,8 @@ export default function TripsView({ identifier, tripId }) {
         stroke: { curve: "stepline" },
         yaxis: {
             min: 0,
-            max: 150,
-            tickAmount: 6,
+            max: p85Max,
+            tickAmount: p85Max / 10,
             labels: {
                 formatter: (val) => Math.round(val),
             },
