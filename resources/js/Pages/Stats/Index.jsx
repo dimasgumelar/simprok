@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Chart from "react-apexcharts";
@@ -25,6 +25,15 @@ export default function StatsIndex() {
         } catch (err) {
             console.error(err);
         }
+    };
+
+    const roundUpTo10 = (value) => Math.ceil(value / 10) * 10;
+
+    const getMaxValue = (series) => {
+        if (!series || series.length === 0) return 0;
+
+        const allValues = series.flatMap((item) => item.data || []);
+        return Math.max(...allValues);
     };
 
     // Fungsi untuk fetch data dari endpoint
@@ -109,6 +118,16 @@ export default function StatsIndex() {
         setIsOptimal((prev) => !prev);
     };
 
+    const avgMax = useMemo(() => {
+        const max = getMaxValue(avgSeries);
+        return roundUpTo10(max);
+    }, [avgSeries]);
+
+    const p85Max = useMemo(() => {
+        const max = getMaxValue(p85Series);
+        return roundUpTo10(max);
+    }, [p85Series]);
+
     const avgOptions = {
         chart: {
             id: "avg-speed-realtime",
@@ -124,8 +143,8 @@ export default function StatsIndex() {
         stroke: { curve: "stepline" },
         yaxis: {
             min: 0,
-            max: 150,
-            tickAmount: 6,
+            max: avgMax,
+            tickAmount: avgMax / 10,
             labels: {
                 formatter: (val) => Math.round(val),
             },
@@ -149,8 +168,8 @@ export default function StatsIndex() {
         stroke: { curve: "stepline" },
         yaxis: {
             min: 0,
-            max: 150,
-            tickAmount: 6,
+            max: p85Max,
+            tickAmount: p85Max / 10,
             labels: {
                 formatter: (val) => Math.round(val),
             },

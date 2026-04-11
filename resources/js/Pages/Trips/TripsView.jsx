@@ -26,8 +26,6 @@ export default function TripsView({ identifier, tripId }) {
 
             const data = res.data;
 
-            console.log(data);
-
             const maxAvgLength = Math.max(
                 ...data.avg.map((item) => item.data.length),
             );
