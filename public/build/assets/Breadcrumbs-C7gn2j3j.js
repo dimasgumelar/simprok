@@ -1,0 +1,1 @@
+import{j as r}from"./app-9FQWAr-I.js";function t({list:s=[]}){return r.jsx("div",{className:"breadcrumbs text-sm",children:r.jsx("ul",{children:s.map((e,i)=>r.jsx("li",{children:e},i))})})}export{t as B};
