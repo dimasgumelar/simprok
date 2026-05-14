@@ -3,7 +3,7 @@ import { Head } from "@inertiajs/react";
 import axios from "axios";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TripMap from "@/Components/Maps/TripView";
-import { parseDateTimeFull } from "@/utils/helper-function";
+import { parseDateTimeFull, ParseTime } from "@/utils/helper-function";
 import { BreadcrumbsTrips } from "@/Pages/Trips/Constant";
 import Breadcrumbs from "@/Components/Breadcrumbs";
 import Chart from "react-apexcharts";
@@ -17,6 +17,7 @@ export default function TripsView({ identifier, tripId }) {
     const [p85Series, setP85Series] = useState([]);
     const [avgCategories, setAvgCategories] = useState([]);
     const [p85Categories, setP85Categories] = useState([]);
+    const [intervalSeconds, setIntervalSeconds] = useState(5);
 
     const fetchTripStats = async () => {
         try {
@@ -101,6 +102,38 @@ export default function TripsView({ identifier, tripId }) {
         [trips],
     );
 
+    // const speedChartData = useMemo(() => {
+    //     return trips.map((item) => ({
+    //         x: ParseTime(item.recorded_at),
+    //         y: item.speed,
+    //     }));
+    // }, [trips]);
+
+    const speedChartData = useMemo(() => {
+        if (trips.length === 0) return [];
+
+        let lastTimestamp = 0;
+
+        return trips
+            .filter((item) => {
+                const current = new Date(item.recorded_at).getTime();
+
+                if (
+                    lastTimestamp === 0 ||
+                    current - lastTimestamp >= intervalSeconds * 1000
+                ) {
+                    lastTimestamp = current;
+                    return true;
+                }
+
+                return false;
+            })
+            .map((item) => ({
+                x: ParseTime(item.recorded_at),
+                y: item.speed,
+            }));
+    }, [trips, intervalSeconds]);
+
     const avgOptions = {
         chart: {
             id: "avg-speed-realtime",
@@ -151,6 +184,36 @@ export default function TripsView({ identifier, tripId }) {
         title: { text: "Persentil 85" },
     };
 
+    const speedOptions = {
+        chart: {
+            id: "speed-over-time",
+            animations: { enabled: true },
+            fontFamily: FONT_FAMILY,
+        },
+        xaxis: {
+            type: "category",
+            title: {
+                text: "Waktu",
+            },
+            labels: {
+                rotate: -45,
+            },
+            tickAmount: 10,
+        },
+        yaxis: {
+            min: 0,
+            title: {
+                text: "Kecepatan (Km/jam)",
+            },
+        },
+        stroke: {
+            curve: "smooth",
+        },
+        title: {
+            text: "Kecepatan Berdasarkan Waktu",
+        },
+    };
+
     return (
         <AuthenticatedLayout>
             <Head title="Lihat Trip" />
@@ -179,6 +242,39 @@ export default function TripsView({ identifier, tripId }) {
                                 <Chart
                                     options={avgOptions}
                                     series={avgSeries}
+                                    type="line"
+                                    height={400}
+                                />
+                            </div>
+
+                            {/* Chart Speed */}
+                            <div className="w-5/6 mx-auto mb-3">
+                                <select
+                                    className="select select-bordered"
+                                    value={intervalSeconds}
+                                    onChange={(e) =>
+                                        setIntervalSeconds(
+                                            Number(e.target.value),
+                                        )
+                                    }
+                                >
+                                    <option value={1}>1 Detik</option>
+                                    <option value={5}>5 Detik</option>
+                                    <option value={10}>10 Detik</option>
+                                    <option value={30}>30 Detik</option>
+                                    <option value={60}>1 Menit</option>
+                                    <option value={300}>5 Menit</option>
+                                </select>
+                            </div>
+                            <div className="w-5/6 mx-auto">
+                                <Chart
+                                    options={speedOptions}
+                                    series={[
+                                        {
+                                            name: "Kecepatan",
+                                            data: speedChartData,
+                                        },
+                                    ]}
                                     type="line"
                                     height={400}
                                 />

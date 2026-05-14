@@ -88,6 +88,22 @@ export function parseDateTimeFull(params) {
     }
 }
 
+export function ParseTime(params) {
+    if (params) {
+        const date = new Date(params);
+
+        return date
+            .toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+            })
+            .replaceAll(".", ":");
+    } else {
+        return "-";
+    }
+}
+
 export function showValueOrDash(params) {
     if (params) {
         return params;
