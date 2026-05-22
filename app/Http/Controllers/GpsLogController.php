@@ -146,6 +146,20 @@ class GpsLogController extends Controller
         ]);
     }
 
+    public function showTripMulti(Request $request)
+    {
+        return Inertia::render('Trips/TripsViewMulti', [
+            'tripIds' => $request->input('trip_ids', []),
+        ]);
+    }
+
+    public function fetchTrip($tripId)
+    {
+        $trips = $this->gpsLogService->findByTripIdV2($tripId, 1000); // per page 1.000
+
+        return response()->json($trips);
+    }
+
     public function fetchTripData($identifier, $tripId)
     {
         $trips = $this->gpsLogService->findByTripId($identifier, $tripId, 1000); // per page 1.000

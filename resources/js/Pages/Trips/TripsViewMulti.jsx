@@ -2,17 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Head } from "@inertiajs/react";
 import axios from "axios";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import TripMap from "@/Components/Maps/TripView";
-import { parseDateTimeFull, ParseTime } from "@/utils/helper-function";
+import TripMultiView from "@/Components/Maps/TripMultiView";
+import { parseDateTimeFull } from "@/utils/helper-function";
 import { BreadcrumbsTrips } from "@/Pages/Trips/Constant";
 import Breadcrumbs from "@/Components/Breadcrumbs";
 import Chart from "react-apexcharts";
 import { FONT_FAMILY } from "@/utils/constants";
 
-export default function TripsView({ identifier, tripId }) {
+export default function TripsViewMulti({ tripIds }) {
     const breadcrumbs = [<BreadcrumbsTrips />, "Lihat"];
     const [trips, setTrips] = useState([]);
-    const [page, setPage] = useState(1);
     const [avgSeries, setAvgSeries] = useState([]);
     const [p85Series, setP85Series] = useState([]);
     const [avgCategories, setAvgCategories] = useState([]);
@@ -86,25 +85,32 @@ export default function TripsView({ identifier, tripId }) {
 
     const fetchTripStats = async () => {
         try {
-            const res = await axios.get(
-                `/api/trip/statistics/${identifier}/${tripId}`,
-            );
+            const res = await axios.get(`/api/trip/statistics/multi`, {
+                params: {
+                    trip_ids: tripIds,
+                },
+            });
 
             const data = res.data;
 
+            setAvgSeries(data.avg || []);
+            setP85Series(data.p85 || []);
+
             const maxAvgLength = Math.max(
-                ...data.avg.map((item) => item.data.length),
-            );
-            const maxP85Length = Math.max(
-                ...data.p85.map((item) => item.data.length),
+                ...(data.avg || []).map((item) => item.data.length),
+                0,
             );
 
-            setAvgSeries(data.avg);
-            setP85Series(data.p85);
+            const maxP85Length = Math.max(
+                ...(data.p85 || []).map((item) => item.data.length),
+                0,
+            );
+
             setAvgCategories(Array.from({ length: maxAvgLength }, (_, i) => i));
+
             setP85Categories(Array.from({ length: maxP85Length }, (_, i) => i));
         } catch (error) {
-            console.error("Error fetching trip stats:", error);
+            console.error(error);
         }
     };
 
@@ -120,32 +126,57 @@ export default function TripsView({ identifier, tripId }) {
     useEffect(() => {
         let stop = false;
 
-        const loadPage = async () => {
-            try {
-                const res = await axios.get(
-                    `/api/trip/${identifier}/${tripId}?page=${page}`,
-                );
-                const batch = res.data.data;
+        const fetchAllPages = async (tripId) => {
+            let page = 1;
+            let allData = [];
+            let hasNext = true;
 
-                if (!stop && batch.length > 0) {
-                    setTrips((prev) => [...prev, ...batch]);
+            while (hasNext) {
+                const res = await axios.get(`/api/trip/${tripId}?page=${page}`);
+
+                const payload = res.data;
+
+                allData = [...allData, ...(payload.data || [])];
+
+                if (payload.next_page_url) {
+                    page++;
+                } else {
+                    hasNext = false;
                 }
+            }
 
-                if (res.data.next_page_url) {
-                    setPage((prev) => prev + 1);
+            return allData;
+        };
+
+        const loadTrips = async () => {
+            try {
+                const result = await Promise.all(
+                    tripIds.map(async (tripId) => {
+                        const data = await fetchAllPages(tripId);
+
+                        return {
+                            trip_id: tripId,
+                            data,
+                        };
+                    }),
+                );
+
+                if (!stop) {
+                    setTrips(result);
                 }
             } catch (err) {
                 console.error(err);
             }
         };
 
-        loadPage();
+        loadTrips();
+
         return () => (stop = true);
-    }, [page, tripId]);
+    }, [tripIds]);
 
     useEffect(() => {
         fetchTripStats();
-    }, [identifier, tripId]);
+    }, [tripIds]);
 
     const avgMax = useMemo(() => {
         const max = getMaxValue(avgSeries);
@@ -157,73 +188,66 @@ export default function TripsView({ identifier, tripId }) {
         return roundUpTo10(max);
     }, [p85Series]);
 
-    const startDate = useMemo(
-        () => (trips.length > 0 ? trips[0].recorded_at : null),
-        [trips],
-    );
+    const tripSummaries = useMemo(() => {
+        return avgSeries.map((avgItem) => {
+            const trip = trips.find((t) => t.trip_id === avgItem.trip_id);
 
-    const endDate = useMemo(
-        () => (trips.length > 0 ? trips[trips.length - 1].recorded_at : null),
-        [trips],
-    );
+            return {
+                name: avgItem.name,
+                trip_id: avgItem.trip_id,
+                start: trip?.data?.length > 0 ? trip.data[0].recorded_at : null,
+                end:
+                    trip?.data?.length > 0
+                        ? trip.data[trip.data.length - 1].recorded_at
+                        : null,
+            };
+        });
+    }, [trips, avgSeries]);
 
     const speedChartData = useMemo(() => {
-        if (trips.length === 0) return [];
+        if (trips.length === 0 || avgSeries.length === 0) return [];
 
-        let lastTimestamp = 0;
+        return avgSeries.map((avgItem) => {
+            const trip = trips.find((t) => t.trip_id === avgItem.trip_id);
 
-        return trips
-            .filter((item) => {
-                const current = new Date(item.recorded_at).getTime();
-
-                if (
-                    lastTimestamp === 0 ||
-                    current - lastTimestamp >= intervalSeconds * 1000
-                ) {
-                    lastTimestamp = current;
-                    return true;
-                }
-
-                return false;
-            })
-            .map((item) => ({
-                x: ParseTime(item.recorded_at),
-                y: item.speed,
-            }));
-    }, [trips, intervalSeconds]);
-
-    const accelerationChartData = useMemo(() => {
-        if (trips.length === 0) return [];
-
-        let lastTimestamp = 0;
-
-        const filteredTrips = trips.filter((item) => {
-            const current = new Date(item.recorded_at).getTime();
-
-            if (
-                lastTimestamp === 0 ||
-                current - lastTimestamp >= intervalSeconds * 1000
-            ) {
-                lastTimestamp = current;
-                return true;
-            }
-
-            return false;
-        });
-
-        return filteredTrips.map((item, index) => {
-            if (index === 0) {
+            if (!trip) {
                 return {
-                    x: "00:00:00",
-                    y: 0,
+                    name: avgItem.name,
+                    data: [],
                 };
             }
 
-            const prev = filteredTrips[index - 1];
+            let lastTimestamp = 0;
 
-            const acceleration = (item.speed - prev.speed) / intervalSeconds;
+            return {
+                name: avgItem.name,
+                data: trip.data
+                    .filter((item) => {
+                        const current = new Date(item.recorded_at).getTime();
 
-            const totalSeconds = index * intervalSeconds;
+                        if (
+                            lastTimestamp === 0 ||
+                            current - lastTimestamp >= intervalSeconds * 1000
+                        ) {
+                            lastTimestamp = current;
+                            return true;
+                        }
+
+                        return false;
+                    })
+                    .map((item) => item.speed),
+            };
+        });
+    }, [trips, avgSeries, intervalSeconds]);
+
+    const speedCategories = useMemo(() => {
+        const maxLength = Math.max(
+            ...speedChartData.map((item) => item.data.length),
+            0,
+        );
+
+        return Array.from({ length: maxLength }, (_, i) => {
+            const totalSeconds = (i + 1) * intervalSeconds;
 
             const hours = String(Math.floor(totalSeconds / 3600)).padStart(
                 2,
@@ -236,39 +260,125 @@ export default function TripsView({ identifier, tripId }) {
 
             const seconds = String(totalSeconds % 60).padStart(2, "0");
 
+            return `${hours}:${minutes}:${seconds}`;
+        });
+    }, [speedChartData, intervalSeconds]);
+
+    const accelerationChartData = useMemo(() => {
+        if (trips.length === 0 || avgSeries.length === 0) return [];
+
+        return avgSeries.map((avgItem) => {
+            const trip = trips.find((t) => t.trip_id === avgItem.trip_id);
+
+            if (!trip) {
+                return {
+                    name: avgItem.name,
+                    data: [],
+                };
+            }
+
+            let lastTimestamp = 0;
+
+            const filtered = trip.data.filter((item) => {
+                const current = new Date(item.recorded_at).getTime();
+
+                if (
+                    lastTimestamp === 0 ||
+                    current - lastTimestamp >= intervalSeconds * 1000
+                ) {
+                    lastTimestamp = current;
+                    return true;
+                }
+
+                return false;
+            });
+
+            const accelerationData = [];
+
+            for (let i = 1; i < filtered.length; i++) {
+                const prevSpeed = Number(filtered[i - 1].speed || 0);
+                const currentSpeed = Number(filtered[i].speed || 0);
+
+                const acceleration =
+                    (currentSpeed - prevSpeed) / intervalSeconds;
+
+                accelerationData.push(Number(acceleration.toFixed(2)));
+            }
+
             return {
-                x: `${hours}:${minutes}:${seconds}`,
-                y: Number(acceleration.toFixed(2)),
+                name: avgItem.name,
+                data: accelerationData,
             };
         });
-    }, [trips, intervalSeconds]);
+    }, [trips, avgSeries, intervalSeconds]);
 
     const speedDistanceChartData = useMemo(() => {
-        if (trips.length === 0) return [];
+        if (trips.length === 0 || avgSeries.length === 0) return [];
 
-        let currentBucket = 0;
+        return avgSeries.map((avgItem) => {
+            const trip = trips.find((t) => t.trip_id === avgItem.trip_id);
 
-        const result = [];
-
-        const intervalKm = distanceInterval / 1000;
-
-        for (let i = 1; i < trips.length; i++) {
-            const curr = trips[i];
-
-            const distanceKm = Number(curr.total_distance_km || 0);
-
-            if (distanceKm >= currentBucket * intervalKm) {
-                result.push({
-                    x: currentBucket,
-                    y: curr.speed,
-                });
-
-                currentBucket++;
+            if (!trip || trip.data.length === 0) {
+                return {
+                    name: avgItem.name,
+                    data: [],
+                };
             }
-        }
 
-        return result;
-    }, [trips, distanceInterval]);
+            const grouped = [];
+            let currentBucket = 0;
+            let speeds = [];
+
+            trip.data.forEach((item) => {
+                const distanceMeters =
+                    Number(item.total_distance_km || 0) * 1000;
+
+                if (distanceMeters >= currentBucket + distanceInterval) {
+                    if (speeds.length > 0) {
+                        const avgSpeed =
+                            speeds.reduce((a, b) => a + b, 0) / speeds.length;
+
+                        grouped.push(Number(avgSpeed.toFixed(2)));
+                    }
+
+                    currentBucket += distanceInterval;
+                    speeds = [];
+                }
+
+                speeds.push(Number(item.speed || 0));
+            });
+
+            // bucket terakhir
+            if (speeds.length > 0) {
+                const avgSpeed =
+                    speeds.reduce((a, b) => a + b, 0) / speeds.length;
+
+                grouped.push(Number(avgSpeed.toFixed(2)));
+            }
+
+            return {
+                name: avgItem.name,
+                data: grouped,
+            };
+        });
+    }, [trips, avgSeries, distanceInterval]);
+
+    const distanceCategories = useMemo(() => {
+        const maxLength = Math.max(
+            ...speedDistanceChartData.map((item) => item.data.length),
+            0,
+        );
+
+        return Array.from({ length: maxLength }, (_, i) => {
+            const distance = i * distanceInterval;
+
+            if (distance >= 1000) {
+                return `${distance / 1000} km`;
+            }
+
+            return `${distance} m`;
+        });
+    }, [speedDistanceChartData, distanceInterval]);
 
     const avgOptions = {
         chart: {
@@ -327,9 +437,9 @@ export default function TripsView({ identifier, tripId }) {
             fontFamily: FONT_FAMILY,
         },
         xaxis: {
-            type: "category",
+            categories: speedCategories,
             title: {
-                text: "Waktu",
+                text: "Durasi Perjalanan",
             },
             labels: {
                 rotate: -45,
@@ -339,7 +449,7 @@ export default function TripsView({ identifier, tripId }) {
         yaxis: {
             min: 0,
             title: {
-                text: "Kecepatan (Km/jam)",
+                text: `Kecepatan (Km/jam per ${intervalSeconds} detik)`,
             },
             labels: {
                 formatter: (val) => Number(val).toFixed(0),
@@ -349,20 +459,20 @@ export default function TripsView({ identifier, tripId }) {
             curve: "smooth",
         },
         title: {
-            text: "Kecepatan Berdasarkan Waktu",
+            text: `Kecepatan Berdasarkan Durasi (${intervalSeconds} detik)`,
         },
     };
 
     const accelerationOptions = {
         chart: {
-            id: "acceleration-over-time",
+            id: "acceleration-chart",
             animations: { enabled: true },
             fontFamily: FONT_FAMILY,
         },
         xaxis: {
-            type: "category",
+            categories: speedCategories,
             title: {
-                text: "Waktu",
+                text: "Durasi Perjalanan",
             },
             labels: {
                 rotate: -45,
@@ -371,7 +481,7 @@ export default function TripsView({ identifier, tripId }) {
         },
         yaxis: {
             title: {
-                text: "Percepatan",
+                text: `Percepatan (Km/jam per ${intervalSeconds} detik)`,
             },
             labels: {
                 formatter: (val) => Number(val).toFixed(2),
@@ -381,21 +491,25 @@ export default function TripsView({ identifier, tripId }) {
             curve: "smooth",
         },
         title: {
-            text: "Percepatan Berdasarkan Waktu",
+            text: `Percepatan Berdasarkan Durasi (${intervalSeconds} detik)`,
         },
     };
 
     const speedDistanceOptions = {
         chart: {
-            id: "speed-distance",
+            id: "speed-distance-chart",
             animations: { enabled: true },
             fontFamily: FONT_FAMILY,
         },
         xaxis: {
-            type: "category",
+            categories: distanceCategories,
             title: {
-                text: `Jarak (${distanceInterval} meter)`,
+                text: "Jarak Tempuh",
             },
+            labels: {
+                rotate: -45,
+            },
+            tickAmount: 10,
         },
         yaxis: {
             min: 0,
@@ -425,34 +539,18 @@ export default function TripsView({ identifier, tripId }) {
             case "speed":
                 return {
                     options: speedOptions,
-                    series: [
-                        {
-                            name: "Kecepatan",
-                            data: speedChartData,
-                        },
-                    ],
+                    series: speedChartData,
                 };
 
             case "acceleration":
                 return {
                     options: accelerationOptions,
-                    series: [
-                        {
-                            name: "Percepatan",
-                            data: accelerationChartData,
-                        },
-                    ],
+                    series: accelerationChartData,
                 };
-
             case "speed-distance":
                 return {
                     options: speedDistanceOptions,
-                    series: [
-                        {
-                            name: "Kecepatan",
-                            data: speedDistanceChartData,
-                        },
-                    ],
+                    series: speedDistanceChartData,
                 };
 
             case "p85":
@@ -483,11 +581,25 @@ export default function TripsView({ identifier, tripId }) {
                 <div className="card-body">
                     <Breadcrumbs list={breadcrumbs} />
                     <div className="overflow-x-auto">
-                        <h2 className="font-bold text-base mb-3">
-                            Trip : {tripId} ({parseDateTimeFull(startDate)} -{" "}
-                            {parseDateTimeFull(endDate)})
-                        </h2>
-                        <TripMap trips={trips} />
+                        <div className="mb-3">
+                            <h2 className="font-bold text-base">
+                                {tripIds.length > 1
+                                    ? "Perbandingan Beberapa Trip"
+                                    : "Detail Trip"}
+                                :{" "}
+                            </h2>
+                            <div className="mt-2 text-sm">
+                                {tripSummaries.map((trip) => (
+                                    <div key={trip.trip_id}>
+                                        <b>{trip.name}</b> :{" "}
+                                        {parseDateTimeFull(trip.start)}
+                                        {" - "}
+                                        {parseDateTimeFull(trip.end)}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <TripMultiView trips={trips} />
                         <div className="mt-5 overflow-y-hidden">
                             <div className="w-5/6 mx-auto mb-4 flex gap-3">
                                 <select

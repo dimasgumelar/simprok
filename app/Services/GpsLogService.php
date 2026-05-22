@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 
-use App\Models\GpsLog;
 use App\Repositories\DeviceRepository;
 use App\Repositories\GpsLogRepository;
 use App\Repositories\TripStatRepository;
@@ -37,6 +36,11 @@ class GpsLogService
         }
 
         return $this->gpsLogRepo->findBytripId($device->id, $tripId, $perPage);
+    }
+
+    public function findBytripIdV2($tripId, $perPage = 1000)
+    {
+        return $this->gpsLogRepo->findBytripIdV2($tripId, $perPage);
     }
 
     public function getById($id)

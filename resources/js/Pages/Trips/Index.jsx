@@ -28,6 +28,7 @@ export default function TripsIndex({ trips }) {
     const [search, setSearch] = useState("");
     const [sortField, setSortField] = useState("");
     const [sortDirection, setSortDirection] = useState("");
+    const [selectedTrips, setSelectedTrips] = useState([]);
 
     // Delete
     function openDeleteModal(id, identifier) {
@@ -108,6 +109,24 @@ export default function TripsIndex({ trips }) {
         });
     }
 
+    function toggleTrip(tripId) {
+        setSelectedTrips((prev) => {
+            if (prev.includes(tripId)) {
+                return prev.filter((id) => id !== tripId);
+            }
+
+            return [...prev, tripId];
+        });
+    }
+
+    function handleMultiView() {
+        if (selectedTrips.length < 2) return;
+
+        window.location.href = route("trips.view.multi", {
+            trip_ids: selectedTrips,
+        });
+    }
+
     return (
         <AuthenticatedLayout>
             <Head title="Trip" />
@@ -129,6 +148,29 @@ export default function TripsIndex({ trips }) {
                             {/* head */}
                             <thead>
                                 <tr>
+                                    <th>
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox checkbox-sm"
+                                            checked={
+                                                trips.data.length > 0 &&
+                                                selectedTrips.length ===
+                                                    trips.data.length
+                                            }
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedTrips(
+                                                        trips.data.map(
+                                                            (trip) =>
+                                                                trip.trip_id,
+                                                        ),
+                                                    );
+                                                } else {
+                                                    setSelectedTrips([]);
+                                                }
+                                            }}
+                                        />
+                                    </th>
                                     <th></th>
                                     <SortableHeader
                                         label="Nama"
@@ -151,7 +193,8 @@ export default function TripsIndex({ trips }) {
                                         sortDirection={sortDirection}
                                         onSort={handleSort}
                                     />
-                                    <td></td>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -163,6 +206,18 @@ export default function TripsIndex({ trips }) {
                                 ) : (
                                     trips.data.map((trip, index) => (
                                         <tr key={trip.trip_id}>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    className="checkbox checkbox-sm"
+                                                    checked={selectedTrips.includes(
+                                                        trip.trip_id,
+                                                    )}
+                                                    onChange={() =>
+                                                        toggleTrip(trip.trip_id)
+                                                    }
+                                                />
+                                            </td>
                                             <th>
                                                 {(trips.current_page - 1) *
                                                     trips.per_page +
@@ -177,66 +232,111 @@ export default function TripsIndex({ trips }) {
                                                 )}
                                             </td>
                                             <td className="flex flex-wrap justify-center items-center gap-2">
-                                                <ViewButton
-                                                    route={route("trips.view", {
-                                                        identifier:
-                                                            trip.identifier,
-                                                        tripId: trip.trip_id,
-                                                    })}
-                                                />
-                                                <div
-                                                    key={trip.trip_id}
-                                                    className={`dropdown dropdown-end ${index == trips.data.length - 1 ? "dropdown-top" : ""}`}
-                                                >
-                                                    <div
-                                                        tabIndex={0}
-                                                        role="button"
-                                                        className="btn btn-sm btn-secondary"
-                                                    >
-                                                        <FaDownload />
-                                                        <span className="hidden sm:flex">
-                                                            Unduh
-                                                        </span>
-                                                    </div>
-                                                    <ul
-                                                        tabIndex="-1"
-                                                        className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
-                                                    >
-                                                        <li
-                                                            onClick={() =>
-                                                                handleTripExport(
-                                                                    "raw",
-                                                                    trip.identifier,
-                                                                    trip.trip_id,
-                                                                )
-                                                            }
+                                                {selectedTrips.length < 2 && (
+                                                    <>
+                                                        <ViewButton
+                                                            route={route(
+                                                                "trips.view.multi",
+                                                                {
+                                                                    trip_ids: [
+                                                                        trip.trip_id,
+                                                                    ],
+                                                                },
+                                                            )}
+                                                        />
+
+                                                        <div
+                                                            key={trip.trip_id}
+                                                            className={`dropdown dropdown-end ${
+                                                                index ==
+                                                                trips.data
+                                                                    .length -
+                                                                    1
+                                                                    ? "dropdown-top"
+                                                                    : ""
+                                                            }`}
                                                         >
-                                                            <a>Data mentah</a>
-                                                        </li>
-                                                        <li
-                                                            onClick={() =>
-                                                                handleTripExport(
-                                                                    "stats",
-                                                                    trip.identifier,
-                                                                    trip.trip_id,
-                                                                )
-                                                            }
-                                                        >
-                                                            <a>Statistik</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                {role.hasAdmin && (
-                                                    <DeleteButton
-                                                        onClick={() =>
-                                                            openDeleteModal(
-                                                                trip.trip_id,
-                                                                trip.identifier,
-                                                            )
-                                                        }
-                                                    />
+                                                            <div
+                                                                tabIndex={0}
+                                                                role="button"
+                                                                className="btn btn-sm btn-secondary"
+                                                            >
+                                                                <FaDownload />
+                                                                <span className="hidden sm:flex">
+                                                                    Unduh
+                                                                </span>
+                                                            </div>
+
+                                                            <ul
+                                                                tabIndex="-1"
+                                                                className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+                                                            >
+                                                                <li
+                                                                    onClick={() =>
+                                                                        handleTripExport(
+                                                                            "raw",
+                                                                            trip.identifier,
+                                                                            trip.trip_id,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <a>
+                                                                        Data
+                                                                        mentah
+                                                                    </a>
+                                                                </li>
+
+                                                                <li
+                                                                    onClick={() =>
+                                                                        handleTripExport(
+                                                                            "stats",
+                                                                            trip.identifier,
+                                                                            trip.trip_id,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <a>
+                                                                        Statistik
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+
+                                                        {role.hasAdmin && (
+                                                            <DeleteButton
+                                                                onClick={() =>
+                                                                    openDeleteModal(
+                                                                        trip.trip_id,
+                                                                        trip.identifier,
+                                                                    )
+                                                                }
+                                                            />
+                                                        )}
+                                                    </>
                                                 )}
                                             </td>
+                                            {selectedTrips.length >= 2 &&
+                                                index === 0 && (
+                                                    <td
+                                                        rowSpan={
+                                                            trips.data.length
+                                                        }
+                                                        className="align-top"
+                                                    >
+                                                        <button
+                                                            className="btn btn-primary btn-sm"
+                                                            onClick={
+                                                                handleMultiView
+                                                            }
+                                                        >
+                                                            Lihat Multi Trip (
+                                                            {
+                                                                selectedTrips.length
+                                                            }
+                                                            )
+                                                        </button>
+                                                    </td>
+                                                )}
                                         </tr>
                                     ))
                                 )}

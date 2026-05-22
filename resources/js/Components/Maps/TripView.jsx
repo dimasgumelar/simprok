@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { parseDateTime } from "@/utils/helper-function";
+import { formatDuration, parseDateTime } from "@/utils/helper-function";
 
 // Marker icons
 import {
@@ -104,6 +104,13 @@ const TripView = ({
                 }).addTo(map);
                 circle.bindPopup(`
                     Kecepatan: <b>${d.speed ?? "N/A"}</b> km/h<br/>
+                    Total Jarak: <b>${Number(
+                        d.total_distance_km ?? 0,
+                    ).toLocaleString("id-ID", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    })}</b> km<br/>
+                    Lama Perjalanan: <b>${formatDuration(trips[0]?.recorded_at, d.recorded_at) ?? "N/A"}</b><br/>
                     ${parseDateTime(d.recorded_at)}
                 `);
                 markersRef.current.push(circle);
@@ -133,7 +140,15 @@ const TripView = ({
             marker.bindPopup(
                 `<b>Titik Akhir</b><br/>Kecepatan: <b>${
                     last.speed ?? "N/A"
-                }</b> km/h<br>${parseDateTime(last.recorded_at)}`,
+                }</b> km/h<br>
+                Total Jarak: <b>${Number(
+                    last.total_distance_km ?? 0,
+                ).toLocaleString("id-ID", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                })}</b> km<br/>
+                    Lama Perjalanan: <b>${formatDuration(trips[0]?.recorded_at, last.recorded_at) ?? "N/A"}</b><br/>
+                ${parseDateTime(last.recorded_at)}`,
             );
             markersRef.current.push(marker);
         }

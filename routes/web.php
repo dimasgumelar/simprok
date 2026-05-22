@@ -52,9 +52,8 @@ Route::middleware(['auth', 'role:admin|operator'])->group(function () {
     
     Route::get('/trip', [GpsLogController::class, 'tripIndex'])->name('trips.index');
     Route::get('/trip/export', [GpsLogController::class, 'tripExport'])->name('trips.export');
-    Route::get('/trip/{identifier}/view/{tripId}', [GpsLogController::class, 'showTrip'])->name('trips.view');
-    Route::get('/api/trip/{identifier}/{tripId}', [GpsLogController::class, 'fetchTripData']);
-    Route::get('/api/trip/statistics/{identifier}/{tripId}', [TripStatController::class, 'fetchTripStatDataById']);
+    // Route::get('/trip/{identifier}/view/{tripId}', [GpsLogController::class, 'showTrip'])->name('trips.view');
+    Route::get('/trip/view', [GpsLogController::class, 'showTripMulti'])->name('trips.view.multi');
     Route::get('/trip/export/{type}/{identifier}/{tripId}', [GpsLogController::class, 'tripExportById'])->name('trip.export');
     Route::post('/trip/{identifier}/{tripId}/delete', [GpsLogController::class, 'destroy'])->name('trips.destroy');
     
@@ -63,7 +62,12 @@ Route::middleware(['auth', 'role:admin|operator'])->group(function () {
     Route::get('/trip-map', [GpsController::class, 'tripMap'])->name('gps.tripMap');
     
     Route::get('/trip/statistics', [TripStatController::class, 'index'])->name('trips.stats');
+    
+    Route::get('/api/trip/statistics/multi', [TripStatController::class, 'fetchTripStatDataMulti']);
+    Route::get('/api/trip/{identifier}/{tripId}', [GpsLogController::class, 'fetchTripData']);
+    Route::get('/api/trip/statistics/{identifier}/{tripId}', [TripStatController::class, 'fetchTripStatDataById']);
     Route::get('/api/trip/statistics', [TripStatController::class, 'fetchTripStatData']);
+    Route::get('/api/trip/{tripId}', [GpsLogController::class, 'fetchTrip']);
 });
 
 require __DIR__.'/auth.php';

@@ -44,4 +44,13 @@ class TripStatController extends Controller
         
         return response()->json($data);
     }
+
+    public function fetchTripStatDataMulti(Request $request)
+    {
+        $tripIds = $request->input('trip_ids', []);
+
+        $data = $this->tripStatService->getDataMulti($tripIds);
+
+        return response()->json($data);
+    }
 }

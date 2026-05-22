@@ -134,4 +134,37 @@ class TripStatService
         ];
         return $data;
     }
+
+    public function getDataMulti($tripIds = [])
+    {
+        $avgChartData = [];
+        $p85ChartData = [];
+        
+        $allStats = $this->tripStatRepo->findByDeviceTrips($tripIds);
+        $grouped = $allStats->groupBy(function ($item) {
+            return $item->device_id.'|'.$item->trip_id;
+        });
+
+        foreach ($grouped as $key => $rows) {
+            [$deviceId, $tripId] = explode('|', $key);
+            $avgChartData[] = [
+                'name' => $rows->first()->device->name . " [".$tripId."]",
+                'trip_id' => $tripId,
+                'data' => $rows->pluck('avg_speed')->values()->toArray(),
+            ];
+
+            $p85ChartData[] = [
+                'name' => $rows->first()->device->name . " [".$tripId."]",
+                'trip_id' => $tripId,
+                'data' => $rows->pluck('p85_speed')->values()->toArray(),
+            ];
+        }
+
+        $data = [
+            "avg" => $avgChartData,
+            "p85" => $p85ChartData,
+        ];
+
+        return $data;
+    }
 }

@@ -66,6 +66,14 @@ class TripStatRepository
         return $isFull ? $query->get() : $query->get(['km', 'avg_speed', 'p85_speed']);
     }
 
+    public function findBytripIds(array $tripIds)
+    {
+        return TripStat::whereIn('trip_id', $tripIds)
+            ->with('device')
+            ->orderBy('id')
+            ->get();
+    }
+
     public function deleteByTripId($deviceId, $tripId)
     {
         return TripStat::where('device_id', $deviceId)
@@ -88,6 +96,20 @@ class TripStatRepository
                     $q->orWhere(function ($sub) use ($tripId, $deviceIds, $i) {
                         $sub->where('trip_id', $tripId)
                             ->where('device_id', $deviceIds[$i]);
+                    });
+                }
+            })
+            ->orderBy('id')
+            ->get();
+    }
+
+    public function findByDeviceTrips(array $tripIds)
+    {
+        return TripStat::with('device')
+            ->where(function ($q) use ($tripIds, ) {
+                foreach ($tripIds as $tripId) {
+                    $q->orWhere(function ($sub) use ($tripId) {
+                        $sub->where('trip_id', $tripId);
                     });
                 }
             })

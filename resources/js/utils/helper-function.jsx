@@ -111,3 +111,18 @@ export function showValueOrDash(params) {
         return "-";
     }
 }
+
+export const formatDuration = (start, current) => {
+    const startTime = new Date(start);
+    const currentTime = new Date(current);
+
+    const diffMs = currentTime - startTime;
+
+    const totalSeconds = Math.floor(diffMs / 1000);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours}j ${minutes}m ${seconds}d`;
+};
