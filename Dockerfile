@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     curl \
     zip \
+    libzip-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
@@ -21,7 +22,8 @@ RUN apt-get update && apt-get install -y \
         exif \
         pcntl \
         bcmath \
-        gd
+        gd \
+        zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
